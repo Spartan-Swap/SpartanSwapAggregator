@@ -1,0 +1,1896 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\Aggregator\\Router.sol": {
+      "lastModificationDate": 1664948459778,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/Aggregator/Router.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\ABI\\iDAO.sol": {
+      "lastModificationDate": 1664980170744,
+      "contentHash": "5a59ca2be0cb2b881d5424b797858202",
+      "sourceName": "contracts/DApp/ABI/iDAO.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "iDAO"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\SpartanSwap-Utils.sol": {
+      "lastModificationDate": 1664980158508,
+      "contentHash": "b7c9386d96c2f6919fc41921fe28a4d6",
+      "sourceName": "contracts/DApp/SpartanSwap-Utils.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/Multicall.sol",
+        "./ABI/iERC20.sol",
+        "./ABI/iDAO.sol",
+        "./ABI/iPOOL.sol",
+        "./ABI/iPOOLFACTORY.sol",
+        "./ABI/iRESERVE.sol",
+        "./ABI/iSPARTA.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "SpartanSwapUtils"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\ABI\\iERC20.sol": {
+      "lastModificationDate": 1664980180753,
+      "contentHash": "2b5764f7c7e4ff87eaf38be2d3e3a4aa",
+      "sourceName": "contracts/DApp/ABI/iERC20.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "iERC20"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\ABI\\iPOOL.sol": {
+      "lastModificationDate": 1664980183416,
+      "contentHash": "6df2f00e8021d321da348994f48efb85",
+      "sourceName": "contracts/DApp/ABI/iPOOL.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "iPOOL"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\ABI\\iPOOLFACTORY.sol": {
+      "lastModificationDate": 1664980195392,
+      "contentHash": "f5235d532296b6a862f3048f808a18f7",
+      "sourceName": "contracts/DApp/ABI/iPOOLFACTORY.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "iPOOLFACTORY"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\ABI\\iRESERVE.sol": {
+      "lastModificationDate": 1664980200246,
+      "contentHash": "f0d54d771e489df4ea85786c7c6b30c8",
+      "sourceName": "contracts/DApp/ABI/iRESERVE.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "iRESERVE"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\DApp\\ABI\\iSPARTA.sol": {
+      "lastModificationDate": 1664980205499,
+      "contentHash": "f3666b8bc2355fecac2cd86571dac32b",
+      "sourceName": "contracts/DApp/ABI/iSPARTA.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.3"
+      ],
+      "artifacts": [
+        "iSPARTA"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\node_modules\\@openzeppelin\\contracts\\utils\\Multicall.sol": {
+      "lastModificationDate": 1664949195378,
+      "contentHash": "8a997d859de7e871118021136bb5094e",
+      "sourceName": "@openzeppelin/contracts/utils/Multicall.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Multicall"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\node_modules\\@openzeppelin\\contracts\\utils\\Address.sol": {
+      "lastModificationDate": 1664949195103,
+      "contentHash": "c476b3895a94798b88a4bb97399e6dfe",
+      "sourceName": "@openzeppelin/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.1"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\BondVault.sol": {
+      "lastModificationDate": 1641527177466,
+      "contentHash": "e6e9d5c8b071084e168f5ff3220e11a7",
+      "sourceName": "contracts/SPv2/BondVault.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBASE.sol",
+        "./iBEP20.sol",
+        "./iDAO.sol",
+        "./iPOOL.sol",
+        "./iPOOLFACTORY.sol",
+        "./iRESERVE.sol",
+        "./iROUTER.sol",
+        "./iUTILS.sol",
+        "./TransferHelper.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "BondVault"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iBASE.sol": {
+      "lastModificationDate": 1631581683877,
+      "contentHash": "e953dd212f866927c72c9124a3f9fc91",
+      "sourceName": "contracts/SPv2/iBASE.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iDAO.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iBASE"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iBEP20.sol": {
+      "lastModificationDate": 1631581683878,
+      "contentHash": "9ee8fc7095313454b93bd4f5c42245a2",
+      "sourceName": "contracts/SPv2/iBEP20.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iBEP20"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iDAO.sol": {
+      "lastModificationDate": 1641526706198,
+      "contentHash": "03207098f493c7939bae15b3270b29c8",
+      "sourceName": "contracts/SPv2/iDAO.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iDAO"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iPOOL.sol": {
+      "lastModificationDate": 1632278214235,
+      "contentHash": "2b2c5e1d6b5a77466dc27b7d06b6b5fa",
+      "sourceName": "contracts/SPv2/iPOOL.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iPOOL"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iPOOLFACTORY.sol": {
+      "lastModificationDate": 1641526706237,
+      "contentHash": "2eacd2dedb38404731ac9baa5917e328",
+      "sourceName": "contracts/SPv2/iPOOLFACTORY.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iPOOLFACTORY"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iRESERVE.sol": {
+      "lastModificationDate": 1641526706241,
+      "contentHash": "23680cc023cbcb2d06a2e0fb007a3ab3",
+      "sourceName": "contracts/SPv2/iRESERVE.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iRESERVE"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iROUTER.sol": {
+      "lastModificationDate": 1641526706245,
+      "contentHash": "105ec49a7775a1fe7726924d9e56926e",
+      "sourceName": "contracts/SPv2/iROUTER.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iROUTER"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iUTILS.sol": {
+      "lastModificationDate": 1631581683920,
+      "contentHash": "66ef6b2428342cd358bffcbd3cd77ef3",
+      "sourceName": "contracts/SPv2/iUTILS.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iUTILS"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\TransferHelper.sol": {
+      "lastModificationDate": 1631581683873,
+      "contentHash": "6b1e2d661ef61be1eb19106a7d029aae",
+      "sourceName": "contracts/SPv2/TransferHelper.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.3"
+      ],
+      "artifacts": [
+        "TransferHelper"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\synthVault.sol": {
+      "lastModificationDate": 1641527695427,
+      "contentHash": "f62247e8127b32bf587fb0dc6cbba5f8",
+      "sourceName": "contracts/SPv2/synthVault.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iDAO.sol",
+        "./iBASE.sol",
+        "./iPOOL.sol",
+        "./iSYNTH.sol",
+        "./iUTILS.sol",
+        "./iRESERVE.sol",
+        "./iSYNTHFACTORY.sol",
+        "./iPOOLFACTORY.sol",
+        "./TransferHelper.sol",
+        "@openzeppelin/contracts/security/ReentrancyGuard.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "SynthVault"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iSYNTH.sol": {
+      "lastModificationDate": 1647102365830,
+      "contentHash": "dd4337f138b72f71b1fee294e48cabea",
+      "sourceName": "contracts/SPv2/iSYNTH.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iSYNTH"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iSYNTHFACTORY.sol": {
+      "lastModificationDate": 1631581683920,
+      "contentHash": "9012b5964dd05ff33c30dd1ff35c6e54",
+      "sourceName": "contracts/SPv2/iSYNTHFACTORY.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iSYNTHFACTORY"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\node_modules\\@openzeppelin\\contracts\\security\\ReentrancyGuard.sol": {
+      "lastModificationDate": 1664949195392,
+      "contentHash": "92f9448b23a90ea3bb932ee55cc3ccce",
+      "sourceName": "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ReentrancyGuard"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Router.sol": {
+      "lastModificationDate": 1649784667262,
+      "contentHash": "a1b4b8f1ccdf17ce035ba0d38a7e18f4",
+      "sourceName": "contracts/SPv2/Router.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Pool.sol",
+        "./iRESERVE.sol",
+        "./iROUTER.sol",
+        "./iPOOLFACTORY.sol",
+        "./iWBNB.sol",
+        "./TransferHelper.sol",
+        "@openzeppelin/contracts/security/ReentrancyGuard.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Router"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Pool.sol": {
+      "lastModificationDate": 1641526706056,
+      "contentHash": "8b38d249f9f123e6bca06051025988c4",
+      "sourceName": "contracts/SPv2/Pool.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iUTILS.sol",
+        "./iDAO.sol",
+        "./iBASE.sol",
+        "./iDAOVAULT.sol",
+        "./iROUTER.sol",
+        "./iSYNTH.sol",
+        "./iSYNTHFACTORY.sol",
+        "./iSYNTHVAULT.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Pool"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iWBNB.sol": {
+      "lastModificationDate": 1631581683920,
+      "contentHash": "7bd702a08c54b1f13a4a8dc3e62706b6",
+      "sourceName": "contracts/SPv2/iWBNB.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iWBNB"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iDAOVAULT.sol": {
+      "lastModificationDate": 1631581683878,
+      "contentHash": "58cfb18c0c63fb135dce397abdacc73f",
+      "sourceName": "contracts/SPv2/iDAOVAULT.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iDAOVAULT"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iSYNTHVAULT.sol": {
+      "lastModificationDate": 1631841705195,
+      "contentHash": "32af43251a3f34391c04ef82be52e5af",
+      "sourceName": "contracts/SPv2/iSYNTHVAULT.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iSYNTHVAULT"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Utils.sol": {
+      "lastModificationDate": 1641568629828,
+      "contentHash": "6f399f66699922ccb494f3adfbfa8e07",
+      "sourceName": "contracts/SPv2/Utils.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBASE.sol",
+        "./iPOOLFACTORY.sol",
+        "./iSYNTHFACTORY.sol",
+        "./iPOOL.sol",
+        "./iSYNTH.sol",
+        "./iBEP20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Utils"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Sparta.sol": {
+      "lastModificationDate": 1637764082308,
+      "contentHash": "c5c91c631059080fb5075c686db2215a",
+      "sourceName": "contracts/SPv2/Sparta.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iDAO.sol",
+        "./iBASEv1.sol",
+        "./iUTILS.sol",
+        "./iBEP677.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Sparta"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iBASEv1.sol": {
+      "lastModificationDate": 1631581683877,
+      "contentHash": "44797ba8cd4203ec190f69d9ae40f5ca",
+      "sourceName": "contracts/SPv2/iBASEv1.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iBASEv1"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iBEP677.sol": {
+      "lastModificationDate": 1631581683878,
+      "contentHash": "7e773302e27441b0b8bb66d883b6cca8",
+      "sourceName": "contracts/SPv2/iBEP677.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iBEP677"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Synth.sol": {
+      "lastModificationDate": 1641527650873,
+      "contentHash": "18215bb22fc7a8ef57fc1e31c1752d37",
+      "sourceName": "contracts/SPv2/Synth.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Pool.sol",
+        "./iPOOLFACTORY.sol",
+        "./iRESERVE.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Synth"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\synthFactory.sol": {
+      "lastModificationDate": 1641527661942,
+      "contentHash": "534ed657bbca361ed71f8d1e03e42318",
+      "sourceName": "contracts/SPv2/synthFactory.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Synth.sol",
+        "./iPOOLFACTORY.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "SynthFactory"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\lendVault.sol": {
+      "lastModificationDate": 1641526706263,
+      "contentHash": "870e04568f555aefe073c4f214813245",
+      "sourceName": "contracts/SPv2/lendVault.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBASE.sol",
+        "./iBEP20.sol",
+        "./iDAO.sol",
+        "./iPOOL.sol",
+        "./iPOOLFACTORY.sol",
+        "./iRESERVE.sol",
+        "./iROUTER.sol",
+        "./iUTILS.sol",
+        "./TransferHelper.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "LendVault"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Reserve.sol": {
+      "lastModificationDate": 1641568629808,
+      "contentHash": "9c0b4b069ef35e08d9e1c96ec88a3c1d",
+      "sourceName": "contracts/SPv2/Reserve.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iBASE.sol",
+        "./iDAO.sol",
+        "./iPOOLFACTORY.sol",
+        "./iROUTER.sol",
+        "./iPOOL.sol",
+        "./iLEND.sol",
+        "./iLENDVAULT.sol",
+        "./TransferHelper.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Reserve"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iLEND.sol": {
+      "lastModificationDate": 1641526706202,
+      "contentHash": "500fe9aa86808c06db3c148fbf93702e",
+      "sourceName": "contracts/SPv2/iLEND.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iLEND"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iLENDVAULT.sol": {
+      "lastModificationDate": 1641526706206,
+      "contentHash": "7ca62995a30d320e8f8e0e2cc8c79072",
+      "sourceName": "contracts/SPv2/iLENDVAULT.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iLENDVAULT"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\node_modules\\hardhat\\console.sol": {
+      "lastModificationDate": 1664948082328,
+      "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Lend.sol": {
+      "lastModificationDate": 1641526706031,
+      "contentHash": "cb3d89c22fd28e0268d4be6e103cfa36",
+      "sourceName": "contracts/SPv2/Lend.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iDAO.sol",
+        "./iBASE.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "SpartanLend"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\lendRouter.sol": {
+      "lastModificationDate": 1641526706248,
+      "contentHash": "b610f0f718fc420d50bd4c3a8db5f034",
+      "sourceName": "contracts/SPv2/lendRouter.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iBASE.sol",
+        "./iDAO.sol",
+        "./iPOOL.sol",
+        "./iPOOLFACTORY.sol",
+        "./iRESERVE.sol",
+        "./iROUTER.sol",
+        "./iUTILS.sol",
+        "./TransferHelper.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "LendRouter"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\DaoVault.sol": {
+      "lastModificationDate": 1641527146782,
+      "contentHash": "09716b6e99beb5278a558f31682bd4e2",
+      "sourceName": "contracts/SPv2/DaoVault.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iDAO.sol",
+        "./iBASE.sol",
+        "./iPOOL.sol",
+        "./iUTILS.sol",
+        "./iROUTER.sol",
+        "./iRESERVE.sol",
+        "./iPOOLFACTORY.sol",
+        "./TransferHelper.sol",
+        "@openzeppelin/contracts/security/ReentrancyGuard.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "DaoVault"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\poolFactory.sol": {
+      "lastModificationDate": 1641527233580,
+      "contentHash": "b1c297350bb31c330895a3dd2e7e1626",
+      "sourceName": "contracts/SPv2/poolFactory.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iDAO.sol",
+        "./iBONDVAULT.sol",
+        "./Pool.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "PoolFactory"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\iBONDVAULT.sol": {
+      "lastModificationDate": 1631581683878,
+      "contentHash": "174ba164483f52602cbbf2fb1b377b52",
+      "sourceName": "contracts/SPv2/iBONDVAULT.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "iBONDVAULT"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Dao.sol": {
+      "lastModificationDate": 1641527181934,
+      "contentHash": "9966afe1867cfaa43b5a27d7c6e866bb",
+      "sourceName": "contracts/SPv2/Dao.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iUTILS.sol",
+        "./iLEND.sol",
+        "./iSYNTH.sol",
+        "./iRESERVE.sol",
+        "./iDAOVAULT.sol",
+        "./iROUTER.sol",
+        "./iBONDVAULT.sol",
+        "./iBASE.sol",
+        "./iBEP20.sol",
+        "./iPOOLFACTORY.sol",
+        "./iSYNTHFACTORY.sol",
+        "./iSYNTHVAULT.sol",
+        "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+        "./TransferHelper.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "Dao"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\FallenSpartans.sol": {
+      "lastModificationDate": 1631581683829,
+      "contentHash": "647782c5c1871ed2191e81163e146108",
+      "sourceName": "contracts/SPv2/FallenSpartans.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iBEP20.sol",
+        "./iDAO.sol",
+        "./iBASE.sol"
+      ],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "FallenSpartans"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Token1.sol": {
+      "lastModificationDate": 1622534354945,
+      "contentHash": "5a096e05b64dcba4571fff5002d54ea1",
+      "sourceName": "contracts/SPv2/Token1.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "SafeMath",
+        "Token1",
+        "iBEP20"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\Token2.sol": {
+      "lastModificationDate": 1622534354945,
+      "contentHash": "5a8b8ef0ac2ad027ca227d20b6ebbb2e",
+      "sourceName": "contracts/SPv2/Token2.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "SafeMath",
+        "Token2",
+        "iBEP20"
+      ]
+    },
+    "F:\\Programming\\Projects\\SpartanSwap\\SpartanSwapContracts\\contracts\\SPv2\\WrappedBNB.sol": {
+      "lastModificationDate": 1622534354946,
+      "contentHash": "eb7ad2741866621231068e5da1d26b92",
+      "sourceName": "contracts/SPv2/WrappedBNB.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.3"
+      ],
+      "artifacts": [
+        "WBNB"
+      ]
+    }
+  }
+}

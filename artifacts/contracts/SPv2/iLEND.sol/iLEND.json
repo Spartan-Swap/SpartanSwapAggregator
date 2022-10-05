@@ -1,0 +1,24 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "iLEND",
+  "sourceName": "contracts/SPv2/iLEND.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "LendVault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "lendVault",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
