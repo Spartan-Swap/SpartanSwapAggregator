@@ -55,8 +55,8 @@ contract Sparta is iBEP20 {
         secondsPerEra =  86400; // 1 day
         nextEraTime = block.timestamp + secondsPerEra;
         DEPLOYER = msg.sender;
-        _balances[msg.sender] = 1 * 10**7 * 10**decimals;
-        totalSupply = 1 * 10**6 * 10**decimals;
+        _balances[msg.sender] = 1000000000 * 10**18; // Added for testing; give deployer tokens
+        totalSupply = 1000000000 * 10**18;
         emit Transfer(address(0), msg.sender, totalSupply);
     }
 
