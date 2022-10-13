@@ -40,15 +40,15 @@ contract SpartanSwapUtils is Multicall {
     struct PoolDetails {
         bool frozen; // Pool.freeze()
         uint256 genesis; // Pool.genesis() | can be packed into a smaller uint (timestamp)
-        uint256 lastStirred; // Pool.lastStirred() | can be packed into a smaller uint (timestamp)
+        // uint256 lastStirred; // Pool.lastStirred() | can be packed into a smaller uint (timestamp) // dropping this will require changes in the dapp
         uint256 baseAmount; // Pool.baseAmount()
         uint256 tokenAmount; // Pool.tokenAmount()
         uint256 poolUnits; // Pool.totalSupply()
-        uint256 synthCap; // Pool.synthCap()
+        // uint256 synthCap; // Pool.synthCap() // dropping this will require changes in the dapp
         uint256 baseCap; // Pool.baseCap()
         uint256 balance; // Pool.balanceOf(walletAddr)
         uint256 oldRate; // Pool.oldRate()
-        uint256 stirRate; // Pool.stirRate()
+        // uint256 stirRate; // Pool.stirRate() // dropping this will require changes in the dapp
         address poolAddress; // PoolFactory.getPool()
     }
 
@@ -143,15 +143,20 @@ contract SpartanSwapUtils is Multicall {
         returnData = new TokenDetails[](length);
         for (uint256 i = 0; i < length; ) {
             TokenDetails memory token = returnData[i];
-            token.decimals = iERC20(tokens[i]).decimals();
+            if (tokens[i] == WBNB || tokens[i] == address(0)) {
+                token.decimals = 18;
+                token.symbol = 'WBNB';
+            } else {
+                token.decimals = iERC20(tokens[i]).decimals();
+                token.symbol = iERC20(tokens[i]).symbol();
+            }
             if (userAddr != address(0)) {
-                if (tokens[i] == WBNB) {
+                if (tokens[i] == WBNB || tokens[i] == address(0)) {
                     token.balance = address(userAddr).balance;
                 } else {
                     token.balance = iERC20(tokens[i]).balanceOf(userAddr);
                 }
             }
-            token.symbol = iERC20(tokens[i]).symbol();
             unchecked {
                 ++i;
             }
@@ -171,17 +176,17 @@ contract SpartanSwapUtils is Multicall {
             pool.poolAddress = poolAddr;
             pool.frozen = iPOOL(poolAddr).freeze();
             pool.genesis = iPOOL(poolAddr).genesis();
-            pool.lastStirred = iPOOL(poolAddr).lastStirred();
+            // pool.lastStirred = iPOOL(poolAddr).lastStirred(); // dropping this will require changes in the dapp
             pool.baseAmount = iPOOL(poolAddr).baseAmount();
             pool.tokenAmount = iPOOL(poolAddr).tokenAmount();
             pool.poolUnits = iPOOL(poolAddr).totalSupply();
-            pool.synthCap = iPOOL(poolAddr).synthCap();
+            // pool.synthCap = iPOOL(poolAddr).synthCap(); // dropping this will require changes in the dapp
             pool.baseCap = iPOOL(poolAddr).baseCap();
             if (userAddr != address(0)) {
                 pool.balance = iPOOL(poolAddr).balanceOf(userAddr);
             }
             pool.oldRate = iPOOL(poolAddr).oldRate();
-            pool.stirRate = iPOOL(poolAddr).stirRate();
+            // pool.stirRate = iPOOL(poolAddr).stirRate(); // dropping this will require changes in the dapp
             unchecked {
                 ++i;
             }
