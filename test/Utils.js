@@ -239,11 +239,11 @@ describe("Deploy and test", function () {
     for (let i = 0; i < tokenArray.length; i++) {
       await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
     }
-    const tokenDetails = await SSUtils.getPoolDetails(
+    const poolDetails = await SSUtils.getPoolDetails(
       owner.address,
       tokenArray
     );
-    console.log(tokenDetails);
-    expect(tokenDetails.length).to.equal(10);
+    // console.log(poolDetails);
+    expect(poolDetails.length).to.equal(10);
   });
 });
