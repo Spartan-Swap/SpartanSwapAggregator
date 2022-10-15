@@ -20,6 +20,7 @@ pragma solidity ^0.8.3;
 contract SpartanSwapUtils is Multicall {
     address public immutable SPARTA; // SPARTAv2 token contract address
     address public immutable WBNB; // WBNB token contract address
+    address[] public stableCoinPools; // Array of stablecoin pool addresses WITH SUFFICIENT LIQUIDITY to derive internal pricing. Make sure this array is set in order of smallest to deepest
 
     struct GlobalDetails {
         bool emitting; // emitting (Store: Sparta.globalDetails)
@@ -119,21 +120,6 @@ contract SpartanSwapUtils is Multicall {
         global.globalFreeze = getReserveInt().globalFreeze();
     }
 
-    // If the above struct version doesnt work, use the below
-    // function getGlobalDetails() external view returns (uint256[7] memory) {
-    //     return [
-    //         boolToInt(iSPARTA(SPARTA).emitting()), // emitting (Store: Sparta.globalDetails)
-    //         iSPARTA(SPARTA).totalSupply(), // totalSupply (Store: Sparta.globalDetails)
-    //         iSPARTA(SPARTA).secondsPerEra(), // secondsPerEra (Store: Sparta.globalDetails)
-    //         iSPARTA(SPARTA).balanceOf( // deadSupply (Store: Sparta.globalDetails)
-    //             0x000000000000000000000000000000000000dEaD
-    //         ),
-    //         boolToInt(getReserveInt().emissions()), // emissions (Store: Reserve.globalDetails)
-    //         iSPARTA(SPARTA).balanceOf(getReserveAddr()), // spartaBalance (Store: Reserve.globalDetails)
-    //         boolToInt(getReserveInt().globalFreeze()) // globalFreeze (Store: Reserve.globalDetails)
-    //     ];
-    // }
-
     function getTokenDetails(address userAddr, address[] calldata tokens)
         external
         view
@@ -192,4 +178,31 @@ contract SpartanSwapUtils is Multicall {
             }
         }
     }
+
+    function getTotalSupply() public view returns (uint totalSupply) {
+        totalSupply = iSPARTA(SPARTA).totalSupply();
+        totalSupply = totalSupply - iSPARTA(SPARTA).balanceOf(0x000000000000000000000000000000000000dEaD);
+    }
+
+    function getCircSupply() external view returns (uint circSupply) {
+        circSupply = getTotalSupply() - iSPARTA(SPARTA).balanceOf(getReserveAddr());
+    }
+
+    function getInternalPrice() external view returns (uint internalPrice) {
+        address[] memory _stableCoinPools = stableCoinPools;
+        internalPrice = iPOOL(_stableCoinPools[0]).tokenAmount() / iPOOL(_stableCoinPools[0]).baseAmount();
+        for (uint256 i = 1; i < _stableCoinPools.length; ) {
+            internalPrice = ((iPOOL(_stableCoinPools[i]).tokenAmount() / iPOOL(_stableCoinPools[i]).baseAmount()) + internalPrice) / 2;
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    // Setters
+
+    function setStablePoolArray(address[] memory stablePoolArray) external {
+        stableCoinPools = stablePoolArray;
+    }
+
 }

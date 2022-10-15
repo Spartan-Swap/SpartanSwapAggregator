@@ -239,11 +239,25 @@ describe("Deploy and test", function () {
     for (let i = 0; i < tokenArray.length; i++) {
       await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
     }
-    const poolDetails = await SSUtils.getPoolDetails(
-      owner.address,
-      tokenArray
-    );
+    const poolDetails = await SSUtils.getPoolDetails(owner.address, tokenArray);
     // console.log(poolDetails);
     expect(poolDetails.length).to.equal(10);
+  });
+
+  it("Should send some SPARTA to dead address & return adjusted total supply < token's reported total supply", async function () {
+    const { Sparta, SSUtils } = await loadFixture(deployTokenFixture);
+    const tokenTotalSupply = await Sparta.totalSupply();
+    await Sparta.transfer("0x000000000000000000000000000000000000dEaD", 50);
+    const adjTotalSupply = await SSUtils.getTotalSupply();
+    // console.log(tokenTotalSupply, adjTotalSupply);
+    expect(adjTotalSupply).to.be.lessThan(tokenTotalSupply);
+  });
+
+  it("Should send some SPARTA to reserve address & return circulating supply", async function () {
+    const { Sparta, SSUtils, Reserve } = await loadFixture(deployTokenFixture);
+    await Sparta.transfer(Reserve.address, 50);
+    const circSupply = await SSUtils.getCircSupply();
+    // console.log(circSupply);
+    expect(circSupply).to.be.greaterThan(0);
   });
 });
