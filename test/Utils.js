@@ -1,11 +1,16 @@
 const { expect } = require("chai");
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
-const { BigNumber } = require("ethers");
-const { deployPool, curatePool, unCuratePool } = require("./Helpers");
-
-const address0 = "0x0000000000000000000000000000000000000000";
-const one = BigNumber.from("1000000000000000000");
-const minAmount = "1000000000000000000000";
+const {
+  deployPool,
+  curatePool,
+  unCuratePool,
+  deployBatchTokens,
+  allowAmnt,
+  minAmount,
+  address0,
+  one,
+} = require("./Helpers");
+const { default: BigNumber } = require("bignumber.js");
 
 describe("Deploy and test", function () {
   async function deployTokenFixture() {
@@ -52,7 +57,10 @@ describe("Deploy and test", function () {
     await Sparta.changeDAO(Dao.address);
 
     // APROVALS
-    await Sparta.approve(PoolFact.address, one.mul(1000000000000000), {
+    await Sparta.approve(PoolFact.address, allowAmnt, {
+      from: owner.address,
+    });
+    await Sparta.approve(Router.address, allowAmnt, {
       from: owner.address,
     });
 
@@ -177,28 +185,12 @@ describe("Deploy and test", function () {
 
   it("Should list pools & return their token details", async function () {
     const { PoolFact, SSUtils, owner } = await loadFixture(deployTokenFixture);
-    // Deploy token contracts
-    const tokenCount = 10; // How many tokens should we deploy?
-    const tokenObjects = []; // Array to push deployed token contract objects to
-    const tokenArray = []; // TokenArray to push deployed token contract addresses to
-    for (let i = 0; i < tokenCount; i++) {
-      const _NewToken = await ethers.getContractFactory("Token1");
-      const NewToken = await _NewToken.deploy("Token" + i);
-      tokenObjects.push(NewToken);
-      tokenArray.push(NewToken.address);
-    }
-    // console.log(tokenArray);
-    // console.log(tokenObjects);
-
-    for (let i = 0; i < tokenArray.length; i++) {
-      await tokenObjects[i].approve(
-        PoolFact.address,
-        one.mul(1000000000000000),
-        {
-          from: owner.address,
-        }
-      );
-    }
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      10,
+      "Token",
+      owner.address,
+      [PoolFact.address]
+    );
 
     for (let i = 0; i < tokenArray.length; i++) {
       await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
@@ -213,28 +205,12 @@ describe("Deploy and test", function () {
 
   it("Should list pools & return their pool details", async function () {
     const { PoolFact, SSUtils, owner } = await loadFixture(deployTokenFixture);
-    // Deploy token contracts
-    const tokenCount = 10; // How many tokens should we deploy?
-    const tokenObjects = []; // Array to push deployed token contract objects to
-    const tokenArray = []; // TokenArray to push deployed token contract addresses to
-    for (let i = 0; i < tokenCount; i++) {
-      const _NewToken = await ethers.getContractFactory("Token1");
-      const NewToken = await _NewToken.deploy("Token" + i);
-      tokenObjects.push(NewToken);
-      tokenArray.push(NewToken.address);
-    }
-    // console.log(tokenArray);
-    // console.log(tokenObjects);
-
-    for (let i = 0; i < tokenArray.length; i++) {
-      await tokenObjects[i].approve(
-        PoolFact.address,
-        one.mul(1000000000000000),
-        {
-          from: owner.address,
-        }
-      );
-    }
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      10,
+      "Token",
+      owner.address,
+      [PoolFact.address]
+    );
 
     for (let i = 0; i < tokenArray.length; i++) {
       await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
@@ -258,6 +234,110 @@ describe("Deploy and test", function () {
     await Sparta.transfer(Reserve.address, 50);
     const circSupply = await SSUtils.getCircSupply();
     // console.log(circSupply);
-    expect(circSupply).to.be.greaterThan(0);
+    expect(circSupply).to.be.greaterThan(0); // change this later to do the math/calls separate and check its exactly correct
+  });
+
+  it("Should deploy 3 pools, assign them as stables and make sure adjustments affect the internal price", async function () {
+    const { PoolFact, owner, SSUtils, Router, Sparta } = await loadFixture(
+      deployTokenFixture
+    );
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      3,
+      "Stablecoin",
+      owner.address,
+      [PoolFact.address, Router.address]
+    );
+
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
+    }
+    const poolDetails = await SSUtils.getPoolDetails(owner.address, tokenArray);
+    const poolArray = [];
+    for (let i = 0; i < poolDetails.length; i++) {
+      poolArray.push(poolDetails[i].poolAddress);
+    }
+    await SSUtils.setStablePoolArray(poolArray); // set the stablecoinpoolarray
+    let intPrice = await SSUtils.getInternalPrice(); // get internal price
+    intPrice = BigNumber(intPrice.toString()).div(one);
+    // console.log(intPrice.toString());
+    expect(intPrice).to.equal("1"); // 10000 === $1.00
+
+    await Router.swap(
+      "1000000000000000000000",
+      tokenArray[0],
+      Sparta.address,
+      "0"
+    );
+
+    intPrice = await SSUtils.getInternalPrice(); // get internal price
+    intPrice = BigNumber(intPrice.toString()).div(one);
+    // console.log("should be different due to swap", intPrice.toString());
+
+    await SSUtils.setStablePoolArray([
+      poolArray[2],
+      poolArray[1],
+      poolArray[0],
+    ]); // reverse order to change internally derived price pool weightings
+    intPrice = await SSUtils.getInternalPrice(); // get internal price
+    intPrice = BigNumber(intPrice.toString()).div(one);
+    // console.log("should be different due to changed stablePool priority/order", intPrice.toString());
+  });
+
+  it("Should list pools and get SPARTA TVL (unbounded)", async function () {
+    const { PoolFact, owner, SSUtils } = await loadFixture(deployTokenFixture);
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      3,
+      "Token",
+      owner.address,
+      [PoolFact.address]
+    );
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pools
+    }
+    const tvlSPARTA = await SSUtils.getTVLUnbounded();
+    // console.log(tvlSPARTA);
+  });
+
+  it("Should list pools and get SPARTA TVL using a bounded array", async function () {
+    const { PoolFact, owner, SSUtils } = await loadFixture(deployTokenFixture);
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      3,
+      "Token",
+      owner.address,
+      [PoolFact.address]
+    );
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pools
+    }
+    const poolAddrs = await SSUtils.getListedPools();
+    const tvlSPARTA = await SSUtils.getTVL(poolAddrs); // not required for v2 due to low pool count, but can be used with a different poolfactory getter design in v3
+    // console.log(tvlSPARTA);
+  });
+
+  it("Should list pools and get USD TVL (unbounded)", async function () {
+    const { PoolFact, owner, SSUtils } = await loadFixture(deployTokenFixture);
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      3,
+      "StableCoin",
+      owner.address,
+      [PoolFact.address]
+    );
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pools
+    }
+    const tvlSPARTA = await SSUtils.getTVLUnbounded();
+
+    const poolDetails = await SSUtils.getPoolDetails(owner.address, tokenArray);
+    const poolArray = [];
+    for (let i = 0; i < poolDetails.length; i++) {
+      poolArray.push(poolDetails[i].poolAddress);
+    }
+    await SSUtils.setStablePoolArray(poolArray); // set the stablecoinpoolarray
+
+    const intPrice = await SSUtils.getInternalPrice();
+    const tvlUSD = BigNumber(tvlSPARTA.toString()).times(
+      BigNumber(intPrice.toString()).div(one).div(one)
+    );
+    // console.log(tvlUSD.toString());
   });
 });

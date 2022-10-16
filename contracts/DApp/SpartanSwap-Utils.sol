@@ -98,6 +98,12 @@ contract SpartanSwapUtils is Multicall {
         return getPoolFactoryInt().getTokenAssets();
     }
 
+    function getListedPools() public view returns (address[] memory) {
+        // Returning the `address[] memory` is fine for current AMM design as the gas limit wont be reached
+        // However V3 should utilize a `.length` and loop mappings to ensure scalability
+        return getPoolFactoryInt().getPoolAssets();
+    }
+
     function getCuratedPools() external view returns (address[] memory) {
         return getPoolFactoryInt().getVaultAssets();
     }
@@ -143,9 +149,7 @@ contract SpartanSwapUtils is Multicall {
                     token.balance = iERC20(tokens[i]).balanceOf(userAddr);
                 }
             }
-            unchecked {
-                ++i;
-            }
+            unchecked {++i;}
         }
     }
 
@@ -173,9 +177,7 @@ contract SpartanSwapUtils is Multicall {
             }
             pool.oldRate = iPOOL(poolAddr).oldRate();
             // pool.stirRate = iPOOL(poolAddr).stirRate(); // dropping this will require changes in the dapp
-            unchecked {
-                ++i;
-            }
+            unchecked {++i;}
         }
     }
 
@@ -188,15 +190,31 @@ contract SpartanSwapUtils is Multicall {
         circSupply = getTotalSupply() - iSPARTA(SPARTA).balanceOf(getReserveAddr());
     }
 
-    function getInternalPrice() external view returns (uint internalPrice) {
+    function getInternalPrice() public view returns (uint internalPrice) {
         address[] memory _stableCoinPools = stableCoinPools;
-        internalPrice = iPOOL(_stableCoinPools[0]).tokenAmount() / iPOOL(_stableCoinPools[0]).baseAmount();
+        require(_stableCoinPools.length > 0, 'Stablecoin array has not been set');
+        internalPrice = (iPOOL(_stableCoinPools[0]).tokenAmount() * 10**18) / iPOOL(_stableCoinPools[0]).baseAmount();
         for (uint256 i = 1; i < _stableCoinPools.length; ) {
-            internalPrice = ((iPOOL(_stableCoinPools[i]).tokenAmount() / iPOOL(_stableCoinPools[i]).baseAmount()) + internalPrice) / 2;
-            unchecked {
-                ++i;
-            }
+            internalPrice = ((iPOOL(_stableCoinPools[i]).tokenAmount() * 10**18 / iPOOL(_stableCoinPools[i]).baseAmount()) + internalPrice) / 2;
+            unchecked {++i;}
         }
+    }
+
+    function getTVLUnbounded() public view returns (uint tvlSPARTA) {
+        address[] memory poolAddresses = getListedPools();
+        for (uint256 i = 0; i < poolAddresses.length; ) {
+            tvlSPARTA = tvlSPARTA + iSPARTA(SPARTA).balanceOf(poolAddresses[i]);
+            unchecked {++i;}
+        }
+        tvlSPARTA = tvlSPARTA * 2;
+    }
+
+    function getTVL(address[] memory poolAddresses) external view returns (uint tvlSPARTA) {
+        for (uint256 i = 0; i < poolAddresses.length; ) {
+            tvlSPARTA = tvlSPARTA + iSPARTA(SPARTA).balanceOf(poolAddresses[i]);
+            unchecked {++i;}
+        }
+        tvlSPARTA = tvlSPARTA * 2;
     }
 
     // Setters
