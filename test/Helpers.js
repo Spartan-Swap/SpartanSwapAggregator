@@ -26,7 +26,12 @@ const unCuratePool = async (PoolFact, tokenAddr) => {
   await PoolFact.removeCuratedPool(tokenAddr);
 };
 
-const deployBatchTokens = async (tokenCount, namingString, spenderAddr, apprvContrArray) => {
+const deployBatchTokens = async (
+  tokenCount,
+  namingString,
+  spenderAddr,
+  apprvContrArray
+) => {
   // Deploy token contracts
   const tokenObjects = []; // Array to push deployed token contract objects to
   const tokenArray = []; // TokenArray to push deployed token contract addresses to
@@ -47,6 +52,12 @@ const deployBatchTokens = async (tokenCount, namingString, spenderAddr, apprvCon
   return { tokenObjects, tokenArray };
 };
 
+const connectToContract = async (contractIdString, contractAddress) => {
+  let contract = await ethers.getContractFactory(contractIdString);
+  contract = await contract.attach(contractAddress);
+  return contract;
+};
+
 module.exports = {
   address0,
   minAmount,
@@ -57,4 +68,5 @@ module.exports = {
   curatePool,
   unCuratePool,
   deployBatchTokens,
+  connectToContract,
 };

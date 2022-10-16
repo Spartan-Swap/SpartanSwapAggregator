@@ -9,6 +9,7 @@ const {
   minAmount,
   address0,
   one,
+  connectToContract,
 } = require("./Helpers");
 const { default: BigNumber } = require("bignumber.js");
 
@@ -230,11 +231,24 @@ describe("Deploy and test", function () {
   });
 
   it("Should send some SPARTA to reserve address & return circulating supply", async function () {
-    const { Sparta, SSUtils, Reserve } = await loadFixture(deployTokenFixture);
-    await Sparta.transfer(Reserve.address, 50);
-    const circSupply = await SSUtils.getCircSupply();
-    // console.log(circSupply);
-    expect(circSupply).to.be.greaterThan(0); // change this later to do the math/calls separate and check its exactly correct
+    const { Sparta, SSUtils, Reserve, PoolFact } = await loadFixture(
+      deployTokenFixture
+    );
+    const circSupply0 = await SSUtils.getCircSupply(); // get initial circ supply
+    // console.log(circSupply0);
+    expect(circSupply0).to.be.greaterThan(0);
+    await Sparta.transfer(Reserve.address, 50); // transfer some SPARTA to reserve
+    const circSupply1 = await SSUtils.getCircSupply(); // get new circ supply
+    // console.log(circSupply1);
+    expect(circSupply0).to.be.greaterThan(circSupply1); // new circ supply should be smaller than initial
+    await deployPool(minAmount, PoolFact, address0); // Deploy BNB pool
+    addr = await PoolFact.getPool(address0); // Should not be address0
+    const BnbPool = await connectToContract("Pool", addr);
+    await BnbPool.transfer(Reserve.address, 50); // transfer some BNB LPs to the reserve
+    await SSUtils.setReservePoolArray([BnbPool.address]); // Set BNB pool's addr in the reserve holdings array
+    const circSupply2 = await SSUtils.getCircSupply(); // get circ supply again
+    // console.log(circSupply2);
+    expect(circSupply1).to.be.greaterThan(circSupply2); // it should be lower again
   });
 
   it("Should deploy 3 pools, assign them as stables and make sure adjustments affect the internal price", async function () {
@@ -339,5 +353,22 @@ describe("Deploy and test", function () {
       BigNumber(intPrice.toString()).div(one).div(one)
     );
     // console.log(tvlUSD.toString());
+  });
+
+  it("Should get reserve holdings", async function () {
+    const { PoolFact, owner, SSUtils } = await loadFixture(deployTokenFixture);
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      5,
+      "Token",
+      owner.address,
+      [PoolFact.address]
+    );
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pools
+    }
+    const poolAddrs = await SSUtils.getListedPools();
+    const resPoolAddrs = await SSUtils.setReservePoolArray(poolAddrs);
+    const resHoldings = await SSUtils.getReserveHoldings();
+    // console.log(resHoldings);
   });
 });

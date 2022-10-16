@@ -21,6 +21,7 @@ contract SpartanSwapUtils is Multicall {
     address public immutable SPARTA; // SPARTAv2 token contract address
     address public immutable WBNB; // WBNB token contract address
     address[] public stableCoinPools; // Array of stablecoin pool addresses WITH SUFFICIENT LIQUIDITY to derive internal pricing. Make sure this array is set in order of smallest to deepest
+    address[] public reserveHeldPools; // Array of pool addresses that the reserve holds LPs of
 
     struct GlobalDetails {
         bool emitting; // emitting (Store: Sparta.globalDetails)
@@ -51,6 +52,16 @@ contract SpartanSwapUtils is Multicall {
         uint256 oldRate; // Pool.oldRate()
         // uint256 stirRate; // Pool.stirRate() // dropping this will require changes in the dapp
         address poolAddress; // PoolFactory.getPool()
+    }
+
+    struct ReserveDetails {
+        address poolAddress; // PoolFactory.getPool()
+        uint256 poolTotalSupply; // Pool.totalSupply()
+        uint256 poolBaseAmount; // Pool.baseAmount() 
+        uint256 poolTokenAmount; // Pool.tokenAmount() 
+        uint256 resBalance; // Pool.balanceOf(Reserve)
+        uint256 resSparta; // resBalance * 10**18 / poolTotalSupply * poolBaseAmount
+        uint256 resTokens; // resBalance * 10**18 / poolTotalSupply * poolTokenAmount
     }
 
     constructor(address _spartaAddr, address _wbnb) {
@@ -181,6 +192,27 @@ contract SpartanSwapUtils is Multicall {
         }
     }
 
+    function getReserveHoldings() public view returns (ReserveDetails[] memory returnData) {
+        address[] memory reservePools = reserveHeldPools;
+        uint256 length = reservePools.length;
+        returnData = new ReserveDetails[](length);
+        for (uint256 i = 0; i < length; ) {
+            ReserveDetails memory resPool = returnData[i];
+            resPool.poolAddress = reservePools[i];
+            uint resBalance = iPOOL(reservePools[i]).balanceOf(getReserveAddr());
+            uint poolTotalSupply = iPOOL(reservePools[i]).totalSupply();
+            uint poolBaseAmount = iPOOL(reservePools[i]).baseAmount();
+            uint poolTokenAmount = iPOOL(reservePools[i]).tokenAmount();
+            resPool.poolTotalSupply = poolTotalSupply;
+            resPool.poolBaseAmount = poolBaseAmount;
+            resPool.poolTokenAmount = poolTokenAmount;
+            resPool.resBalance = resBalance;
+            resPool.resSparta = (poolBaseAmount * resBalance) / poolTotalSupply;
+            resPool.resTokens = (poolTokenAmount * resBalance) / poolTotalSupply;
+            unchecked {++i;}
+        }
+    }
+
     function getTotalSupply() public view returns (uint totalSupply) {
         totalSupply = iSPARTA(SPARTA).totalSupply();
         totalSupply = totalSupply - iSPARTA(SPARTA).balanceOf(0x000000000000000000000000000000000000dEaD);
@@ -188,6 +220,11 @@ contract SpartanSwapUtils is Multicall {
 
     function getCircSupply() external view returns (uint circSupply) {
         circSupply = getTotalSupply() - iSPARTA(SPARTA).balanceOf(getReserveAddr());
+        ReserveDetails[] memory resHoldings = getReserveHoldings();
+        for (uint256 i = 0; i < resHoldings.length; ) {
+            circSupply = circSupply - resHoldings[i].resSparta;
+            unchecked {++i;}
+        }
     }
 
     function getInternalPrice() public view returns (uint internalPrice) {
@@ -209,7 +246,7 @@ contract SpartanSwapUtils is Multicall {
         tvlSPARTA = tvlSPARTA * 2;
     }
 
-    function getTVL(address[] memory poolAddresses) external view returns (uint tvlSPARTA) {
+    function getTVL(address[] calldata poolAddresses) external view returns (uint tvlSPARTA) {
         for (uint256 i = 0; i < poolAddresses.length; ) {
             tvlSPARTA = tvlSPARTA + iSPARTA(SPARTA).balanceOf(poolAddresses[i]);
             unchecked {++i;}
@@ -219,8 +256,14 @@ contract SpartanSwapUtils is Multicall {
 
     // Setters
 
-    function setStablePoolArray(address[] memory stablePoolArray) external {
+    function setStablePoolArray(address[] calldata stablePoolArray) external {
+        // Loop and require(isPool)
         stableCoinPools = stablePoolArray;
+    }
+
+    function setReservePoolArray(address[] calldata reservePoolArray) external {
+        // Loop and require(isPool)
+        reserveHeldPools = reservePoolArray;
     }
 
 }
