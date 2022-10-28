@@ -60,8 +60,8 @@ contract SpartanSwapUtils is Multicall {
         uint256 poolBaseAmount; // Pool.baseAmount() 
         uint256 poolTokenAmount; // Pool.tokenAmount() 
         uint256 resBalance; // Pool.balanceOf(Reserve)
-        uint256 resSparta; // resBalance * 10**18 / poolTotalSupply * poolBaseAmount
-        uint256 resTokens; // resBalance * 10**18 / poolTotalSupply * poolTokenAmount
+        uint256 resSparta; // 
+        uint256 resTokens; // 
     }
 
     constructor(address _spartaAddr, address _wbnb) {
