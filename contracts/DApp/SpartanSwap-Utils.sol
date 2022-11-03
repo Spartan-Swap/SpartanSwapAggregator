@@ -13,6 +13,9 @@ import "./ABI/iPOOL.sol";
 import "./ABI/iPOOLFACTORY.sol";
 import "./ABI/iRESERVE.sol";
 import "./ABI/iSPARTA.sol";
+import "./ABI/iSYNTHFACTORY.sol";
+import "./ABI/iSYNTH.sol";
+import "./ABI/iSYNTHVAULT.sol";
 
 pragma solidity ^0.8.3;
 
@@ -45,13 +48,15 @@ contract SpartanSwapUtils is Multicall {
         // uint256 lastStirred; // Pool.lastStirred() | can be packed into a smaller uint (timestamp) // dropping this will require changes in the dapp
         uint256 baseAmount; // Pool.baseAmount()
         uint256 tokenAmount; // Pool.tokenAmount()
-        uint256 poolUnits; // Pool.totalSupply()
+        uint256 totalSupply; // Pool.totalSupply()
         // uint256 synthCap; // Pool.synthCap() // dropping this will require changes in the dapp
         uint256 baseCap; // Pool.baseCap()
         uint256 balance; // Pool.balanceOf(walletAddr)
         uint256 oldRate; // Pool.oldRate()
         // uint256 stirRate; // Pool.stirRate() // dropping this will require changes in the dapp
         address poolAddress; // PoolFactory.getPool()
+        // staked (daoVault)
+        // staked (bondVault)
     }
 
     struct ReserveDetails {
@@ -62,6 +67,14 @@ contract SpartanSwapUtils is Multicall {
         uint256 resBalance; // Pool.balanceOf(Reserve)
         uint256 resSparta; // 
         uint256 resTokens; // 
+    }
+
+    struct SynthDetails {
+        address synthAddress; // SynthFactory.getSynth(tokenAddr)
+        uint256 balance; // Synth.balanceOf(walletAddr)
+        uint256 staked; // SynthVault.getMemberDeposit(walletAddr, synthAddress)
+        uint256 collateral; // Synth.collateral()
+        uint256 totalSupply; // Synth.totalSupply()
     }
 
     constructor(address _spartaAddr, address _wbnb) {
@@ -99,6 +112,22 @@ contract SpartanSwapUtils is Multicall {
 
     function getReserveInt() public view returns (iRESERVE) {
         return iRESERVE(getReserveAddr()); //
+    }
+
+    function getSynthFactoryAddr() public view returns (address) {
+        return getDaoInt().SYNTHFACTORY(); //
+    }
+
+    function getSynthFactoryInt() public view returns (iSYNTHFACTORY) {
+        return iSYNTHFACTORY(getSynthFactoryAddr()); //
+    }
+
+    function getSynthVaultAddr() public view returns (address) {
+        return getDaoInt().SYNTHVAULT(); //
+    }
+
+    function getSynthVaultInt() public view returns (iSYNTHVAULT) {
+        return iSYNTHVAULT(getSynthVaultAddr()); //
     }
 
     /** PoolFactory Getters */
@@ -180,7 +209,7 @@ contract SpartanSwapUtils is Multicall {
             // pool.lastStirred = iPOOL(poolAddr).lastStirred(); // dropping this will require changes in the dapp
             pool.baseAmount = iPOOL(poolAddr).baseAmount();
             pool.tokenAmount = iPOOL(poolAddr).tokenAmount();
-            pool.poolUnits = iPOOL(poolAddr).totalSupply();
+            pool.totalSupply = iPOOL(poolAddr).totalSupply();
             // pool.synthCap = iPOOL(poolAddr).synthCap(); // dropping this will require changes in the dapp
             pool.baseCap = iPOOL(poolAddr).baseCap();
             if (userAddr != address(0)) {
@@ -188,6 +217,27 @@ contract SpartanSwapUtils is Multicall {
             }
             pool.oldRate = iPOOL(poolAddr).oldRate();
             // pool.stirRate = iPOOL(poolAddr).stirRate(); // dropping this will require changes in the dapp
+            unchecked {++i;}
+        }
+    }
+
+        function getSynthDetails(address userAddr, address[] calldata tokens)
+        external
+        view
+        returns (SynthDetails[] memory returnData)
+    {
+        uint256 length = tokens.length;
+        returnData = new SynthDetails[](length);
+        for (uint256 i = 0; i < length; ) {
+            SynthDetails memory synth = returnData[i];
+            address synthAddr = getSynthFactoryInt().getSynth(tokens[i]);
+            synth.synthAddress = synthAddr;
+            synth.collateral = iSYNTH(synthAddr).collateral();
+            synth.totalSupply = iSYNTH(synthAddr).totalSupply();
+            if (userAddr != address(0)) {
+                synth.balance = iSYNTH(synthAddr).balanceOf(userAddr);
+                synth.staked = getSynthVaultInt().getMemberDeposit(userAddr, synthAddr);
+            }
             unchecked {++i;}
         }
     }

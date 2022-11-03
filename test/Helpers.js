@@ -26,6 +26,10 @@ const unCuratePool = async (PoolFact, tokenAddr) => {
   await PoolFact.removeCuratedPool(tokenAddr);
 };
 
+const deploySynth = async (SynthFact, tokenAddr) => {
+  await SynthFact.createSynth(tokenAddr);
+};
+
 const deployBatchTokens = async (
   tokenCount,
   namingString,
@@ -67,6 +71,7 @@ module.exports = {
   deployPool,
   curatePool,
   unCuratePool,
+  deploySynth,
   deployBatchTokens,
   connectToContract,
 };

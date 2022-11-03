@@ -10,6 +10,7 @@ const {
   address0,
   one,
   connectToContract,
+  deploySynth,
 } = require("./Helpers");
 const { default: BigNumber } = require("bignumber.js");
 
@@ -370,5 +371,29 @@ describe("Deploy and test", function () {
     const resPoolAddrs = await SSUtils.setReservePoolArray(poolAddrs);
     const resHoldings = await SSUtils.getReserveHoldings();
     // console.log(resHoldings);
+  });
+
+  it("Should list pools->curate->synths & return their synth details", async function () {
+    const { PoolFact, SynthFact, SSUtils, owner } = await loadFixture(
+      deployTokenFixture
+    );
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      5,
+      "Token",
+      owner.address,
+      [PoolFact.address]
+    );
+
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
+      await curatePool(PoolFact, tokenArray[i]); // Curate pool
+      await deploySynth(SynthFact, tokenArray[i]); // Deploy synth
+    }
+    const synthDetails = await SSUtils.getSynthDetails(
+      owner.address,
+      tokenArray
+    );
+    // console.log(synthDetails);
+    expect(synthDetails.length).to.equal(5);
   });
 });
