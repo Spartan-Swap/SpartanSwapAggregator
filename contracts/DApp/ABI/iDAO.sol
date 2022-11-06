@@ -33,4 +33,18 @@ interface iDAO {
     function arrayMembers(uint256) external view returns (address);
 
     function mapMember_lastTime(address) external view returns (uint256);
+
+    function running() external view returns (bool);
+
+    function coolOffPeriod() external view returns (uint256);
+
+    function majorityFactor() external view returns (uint256);
+
+    function erasToEarn() external view returns (uint256);
+
+    function daoClaim() external view returns (uint256);
+
+    function daoFee() external view returns (uint256);
+
+    function cancelPeriod() external view returns (uint256);
 }

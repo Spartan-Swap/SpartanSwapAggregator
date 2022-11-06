@@ -1,4 +1,5 @@
 const address0 = "0x0000000000000000000000000000000000000000";
+
 const one = "1000000000000000000";
 const ten = "10000000000000000000";
 const oneHundred = "100000000000000000000";
@@ -6,6 +7,14 @@ const oneThousand = "1000000000000000000000";
 const tenThousand = "10000000000000000000000";
 const oneHundredThousand = "100000000000000000000000";
 const oneMillion = "1000000000000000000000000";
+
+const oneSecond = "1";
+const oneMinute = "60";
+const oneHour = "3600";
+const oneDay = "86400";
+const oneWeek = "604800";
+const oneMonth = "2592000";
+
 const minAmount = "1000000000000000000000";
 const allowAmnt = "100000000000000000000000000000000000000000000";
 
@@ -96,6 +105,12 @@ module.exports = {
   oneThousand,
   oneHundredThousand,
   oneMillion,
+  oneSecond,
+  oneMinute,
+  oneHour,
+  oneDay,
+  oneWeek,
+  oneMonth,
   getBalances,
   getBNBBalance,
   deployPool,

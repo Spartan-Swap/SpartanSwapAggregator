@@ -17,6 +17,7 @@ import "./ABI/iSYNTHFACTORY.sol";
 import "./ABI/iSYNTH.sol";
 import "./ABI/iSYNTHVAULT.sol";
 import "./ABI/iBONDVAULT.sol";
+import "./ABI/iDAOVAULT.sol";
 
 pragma solidity ^0.8.3;
 
@@ -36,6 +37,16 @@ contract SpartanSwapUtils is Multicall {
         uint256 secondsPerEra; // secondsPerEra (Store: Sparta.globalDetails)
         uint256 deadSupply; // deadSupply (Store: Sparta.globalDetails)
         uint256 spartaBalance; // spartaBalance (Store: Reserve.globalDetails)
+    }
+
+    struct DaoGlobalDetails {
+        bool running; // Dao.running()
+        uint256 coolOffPeriod; // Dao.coolOffPeriod()
+        uint256 erasToEarn; // Dao.erasToEarn()
+        uint256 daoClaim; // Dao.daoClaim()
+        uint256 daoFee; // Dao.daoFee()
+        uint256 currentProposal; // Dao.currentProposal()
+        uint256 cancelPeriod; // Dao.cancelPeriod()
     }
 
     struct TokenDetails {
@@ -84,6 +95,12 @@ contract SpartanSwapUtils is Multicall {
         uint256 lastBlockTime; // BondVault.mapBondedAmount_memberDetails[_pool].lastBlockTime[member]
         uint256 claimRate; // 
         bool isMember; // BondVault.mapBondedAmount_memberDetails[_pool].isAssetMember[member]
+    }
+
+    struct DaoDetails {
+        address poolAddress; // 
+        uint256 staked; // Dao.staked - DaoVault.getMemberPoolBalance()
+        uint256 globalStaked; // Dao.globalStaked - DaoVault.mapTotalPool_balance()
     }
 
     constructor(address _spartaAddr, address _wbnb) {
@@ -147,6 +164,14 @@ contract SpartanSwapUtils is Multicall {
         return iBONDVAULT(getBondVaultAddr()); //
     }
 
+    function getDaoVaultAddr() public view returns (address) {
+        return getDaoInt().DAOVAULT(); //
+    }
+
+    function getDaoVaultInt() public view returns (iDAOVAULT) {
+        return iDAOVAULT(getDaoVaultAddr()); //
+    }
+
     /** PoolFactory Getters */
 
     function getListedTokens() external view returns (address[] memory) {
@@ -181,6 +206,19 @@ contract SpartanSwapUtils is Multicall {
         global.emissions = getReserveInt().emissions();
         global.spartaBalance = iSPARTA(SPARTA).balanceOf(getReserveAddr());
         global.globalFreeze = getReserveInt().globalFreeze();
+    }
+
+    
+    function getDaoGlobalDetails() external view returns (DaoGlobalDetails[] memory returnData) {
+        returnData = new DaoGlobalDetails[](1);
+        DaoGlobalDetails memory daoGlobal = returnData[0];
+        daoGlobal.running = getDaoInt().running();
+        daoGlobal.coolOffPeriod = getDaoInt().coolOffPeriod();
+        daoGlobal.erasToEarn = getDaoInt().erasToEarn();
+        daoGlobal.daoClaim = getDaoInt().daoClaim();
+        daoGlobal.daoFee = getDaoInt().daoFee();
+        daoGlobal.currentProposal = getDaoInt().currentProposal();
+        daoGlobal.cancelPeriod = getDaoInt().cancelPeriod();
     }
 
     function getTokenDetails(address userAddr, address[] calldata tokens)
@@ -298,6 +336,24 @@ contract SpartanSwapUtils is Multicall {
                 bond.bondedMember = bondedMember;
                 bond.claimRate = claimRate;
                 bond.lastBlockTime = lastBlockTime;
+            }
+            unchecked {++i;}
+        }
+    }
+
+    function getDaoDetails(address userAddr, address[] calldata pools)
+        external
+        view
+        returns (DaoDetails[] memory returnData)
+    {
+        uint256 length = pools.length;
+        returnData = new DaoDetails[](length);
+        for (uint256 i = 0; i < length; ) {
+            DaoDetails memory dao = returnData[i];
+            dao.poolAddress = pools[i];
+            dao.globalStaked = getDaoVaultInt().mapTotalPool_balance(pools[i]);
+            if (userAddr != address(0)) {
+                dao.staked = getDaoVaultInt().getMemberPoolBalance(pools[i], userAddr);
             }
             unchecked {++i;}
         }

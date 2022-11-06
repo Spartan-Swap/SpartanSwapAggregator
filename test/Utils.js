@@ -20,6 +20,7 @@ const {
   oneHundredThousand,
   ten,
   getPool,
+  oneDay,
 } = require("./Helpers");
 const { default: BigNumber } = require("bignumber.js");
 
@@ -436,10 +437,10 @@ describe("Deploy and test", function () {
       poolAddrArray.push(_poolAddr);
       await curatePool(PoolFact, tokenArray[i]); // Curate pool
       await listBond(BondVault, tokenObjects[i], Dao.address, owner.address); // List asset for bonding
-      const variedAmnt = BigNumber(one).times(i).plus(oneHundred); // Make sure amount is small enough not to cause more than 0.2 slipAdjustment
-      await Dao.bond(tokenArray[i], variedAmnt.toFixed(), {
+      const variedAmnt = BigNumber(one).times(i).plus(oneHundred).toFixed(); // Make sure amount is small enough not to cause more than 0.2 slipAdjustment
+      await Dao.bond(tokenArray[i], variedAmnt, {
         from: owner.address,
-        value: variedAmnt.toFixed(),
+        value: variedAmnt,
       }); // perform a bond txn
     }
 
@@ -448,6 +449,94 @@ describe("Deploy and test", function () {
     // console.log(bondDetails);
     for (let i = 0; i < bondDetails.length; i++) {
       expect(bondDetails[i].bondedTotal).to.be.gt(0);
+    }
+  });
+
+  it("Test DaoGlobalDetails initial defaults then test changing them all", async function () {
+    const { Sparta, Dao, PoolFact, SSUtils, owner } = await loadFixture(
+      deployTokenFixture
+    );
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      5,
+      "Token",
+      owner.address,
+      [PoolFact.address, Dao.address]
+    );
+
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
+      await curatePool(PoolFact, tokenArray[i]); // Curate pool
+      // do some txns here to chang DAO global vars?
+    }
+
+    let daoGlobalDetails = await SSUtils.getDaoGlobalDetails();
+    // console.log(daoGlobalDetails);
+    expect(daoGlobalDetails[0].running).to.be.false;
+    expect(daoGlobalDetails[0].coolOffPeriod).to.equal(0);
+    expect(daoGlobalDetails[0].erasToEarn).to.equal(0);
+    expect(daoGlobalDetails[0].daoClaim).to.equal(0);
+    expect(daoGlobalDetails[0].daoFee).to.equal(0);
+    expect(daoGlobalDetails[0].currentProposal).to.equal(0);
+    expect(daoGlobalDetails[0].cancelPeriod).to.equal(0);
+
+    await Dao.setDaoFactors("1000", "1000", true, oneDay); // (daoClaim, daoFee, running, cancelPeriod)
+    daoGlobalDetails = await SSUtils.getDaoGlobalDetails();
+    // console.log(daoGlobalDetails);
+    expect(daoGlobalDetails[0].daoClaim).to.equal(1000);
+    expect(daoGlobalDetails[0].daoFee).to.equal("1000");
+    expect(daoGlobalDetails[0].running).to.be.true;
+    expect(daoGlobalDetails[0].cancelPeriod).to.equal(oneDay);
+
+    await Dao.setGenesisFactors(oneDay, "30", "6666"); // (coolOff, erasToEarn, majorityFactor)
+    daoGlobalDetails = await SSUtils.getDaoGlobalDetails();
+    // console.log(daoGlobalDetails);
+    expect(daoGlobalDetails[0].coolOffPeriod).to.equal(oneDay);
+    expect(daoGlobalDetails[0].erasToEarn).to.equal("30");
+
+    await approve(Sparta, Dao.address, owner.address);
+    await Dao.newActionProposal("FLIP_EMISSIONS");
+    daoGlobalDetails = await SSUtils.getDaoGlobalDetails();
+    // console.log(daoGlobalDetails);
+    expect(daoGlobalDetails[0].currentProposal).to.equal(1);
+  });
+
+  it("Deploy pools->curate->addLiq->stake and check their DaoDetails", async function () {
+    const { Dao, Router, PoolFact, SSUtils, owner } = await loadFixture(
+      deployTokenFixture
+    );
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      5,
+      "Token",
+      owner.address,
+      [PoolFact.address, Dao.address]
+    );
+
+    const poolAddrArray = [];
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
+      await curatePool(PoolFact, tokenArray[i]); // Curate pool
+      const variedAmnt = BigNumber(one).times(i).plus(oneHundred).toFixed(); // Make sure amount is small enough not to cause more than 0.2 slipAdjustment
+      await Router.addLiquidityAsym(variedAmnt, true, tokenArray[i]); // add liq
+      const poolAddr = await PoolFact.getPool(tokenArray[i]); // Get pool addr
+      poolAddrArray.push(poolAddr);
+      const PoolObj = await connectToContract("Pool", poolAddr); // Get pool object
+      const lpBalance = await PoolObj.balanceOf(owner.address); // get LP balance
+      await approve(PoolObj, Dao.address, owner.address); // approvals for staking in DaoVault
+      await Dao.deposit(poolAddr, lpBalance); // stake in daovault
+    }
+
+    const daoDetails = await SSUtils.getDaoDetails(
+      owner.address,
+      poolAddrArray
+    ); // Set bonded pools array in Utils
+    // console.log(daoDetails);
+    for (let i = 0; i < daoDetails.length; i++) {
+      if (i > 0) {
+        expect(daoDetails[i].staked).to.be.gt(daoDetails[i - 1].staked); // Staked amount must be > previous pool's stake
+      } else {
+        expect(daoDetails[i].staked).to.be.gt(0); // User's DaoVault staked balance must be > 0
+      }
+      expect(daoDetails[i].staked).to.equal(daoDetails[i].globalStaked); // Total staked in DaoVault === user's stake
     }
   });
 });
