@@ -11,6 +11,15 @@ const {
   one,
   connectToContract,
   deploySynth,
+  listBond,
+  mintSpartaForBond,
+  oneThousand,
+  oneHundred,
+  oneMillion,
+  approve,
+  oneHundredThousand,
+  ten,
+  getPool,
 } = require("./Helpers");
 const { default: BigNumber } = require("bignumber.js");
 
@@ -395,5 +404,50 @@ describe("Deploy and test", function () {
     );
     // console.log(synthDetails);
     expect(synthDetails.length).to.equal(5);
+  });
+
+  it("Should list pools->curate->listBond->bond & return their bond details", async function () {
+    const { Sparta, Dao, Router, PoolFact, BondVault, SSUtils, owner } =
+      await loadFixture(deployTokenFixture);
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      5,
+      "Token",
+      owner.address,
+      [PoolFact.address, Dao.address]
+    );
+
+    await Sparta.flipMinting(); // Turn on SPARTA minting
+    const minting = await Sparta.minting();
+    // console.log(minting);
+    expect(minting).to.be.true;
+
+    const daoBalBefore = await Sparta.balanceOf(Dao.address);
+    // console.log(daoBalBefore);
+    expect(daoBalBefore).to.equal(0);
+    await mintSpartaForBond(Sparta, Dao.address); // Mint 1M SPARTA to DAO for Bond program
+    const daoBalanceAfter = await Sparta.balanceOf(Dao.address);
+    // console.log(daoBalanceAfter);
+    expect(daoBalanceAfter).to.equal(oneMillion);
+
+    const poolAddrArray = [];
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
+      const _poolAddr = await PoolFact.getPool(tokenArray[i]); // Get pool addr
+      poolAddrArray.push(_poolAddr);
+      await curatePool(PoolFact, tokenArray[i]); // Curate pool
+      await listBond(BondVault, tokenObjects[i], Dao.address, owner.address); // List asset for bonding
+      const variedAmnt = BigNumber(one).times(i).plus(oneHundred); // Make sure amount is small enough not to cause more than 0.2 slipAdjustment
+      await Dao.bond(tokenArray[i], variedAmnt.toFixed(), {
+        from: owner.address,
+        value: variedAmnt.toFixed(),
+      }); // perform a bond txn
+    }
+
+    await SSUtils.setBondPoolArray(poolAddrArray); // Set bonded pools array in Utils
+    const bondDetails = await SSUtils.getBondDetails(owner.address);
+    // console.log(bondDetails);
+    for (let i = 0; i < bondDetails.length; i++) {
+      expect(bondDetails[i].bondedTotal).to.be.gt(0);
+    }
   });
 });

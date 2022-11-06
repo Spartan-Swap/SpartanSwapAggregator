@@ -16,6 +16,7 @@ import "./ABI/iSPARTA.sol";
 import "./ABI/iSYNTHFACTORY.sol";
 import "./ABI/iSYNTH.sol";
 import "./ABI/iSYNTHVAULT.sol";
+import "./ABI/iBONDVAULT.sol";
 
 pragma solidity ^0.8.3;
 
@@ -25,6 +26,7 @@ contract SpartanSwapUtils is Multicall {
     address public immutable WBNB; // WBNB token contract address
     address[] public stableCoinPools; // Array of stablecoin pool addresses WITH SUFFICIENT LIQUIDITY to derive internal pricing. Make sure this array is set in order of smallest to deepest
     address[] public reserveHeldPools; // Array of pool addresses that the reserve holds LPs of
+    address[] public bondedPools; // Array of pool addresses that were enabled for BondV2
 
     struct GlobalDetails {
         bool emitting; // emitting (Store: Sparta.globalDetails)
@@ -55,8 +57,6 @@ contract SpartanSwapUtils is Multicall {
         uint256 oldRate; // Pool.oldRate()
         // uint256 stirRate; // Pool.stirRate() // dropping this will require changes in the dapp
         address poolAddress; // PoolFactory.getPool()
-        // staked (daoVault)
-        // staked (bondVault)
     }
 
     struct ReserveDetails {
@@ -75,6 +75,15 @@ contract SpartanSwapUtils is Multicall {
         uint256 staked; // SynthVault.getMemberDeposit(walletAddr, synthAddress)
         uint256 collateral; // Synth.collateral()
         uint256 totalSupply; // Synth.totalSupply()
+    }
+
+    struct BondDetails {
+        address poolAddress; // 
+        uint256 bondedTotal; // BondVault.mapTotalPool_balance[curatedPoolAddress[i]]
+        uint256 bondedMember; // BondVault.mapBondedAmount_memberDetails[_pool].bondedLP[member]
+        uint256 lastBlockTime; // BondVault.mapBondedAmount_memberDetails[_pool].lastBlockTime[member]
+        uint256 claimRate; // 
+        bool isMember; // BondVault.mapBondedAmount_memberDetails[_pool].isAssetMember[member]
     }
 
     constructor(address _spartaAddr, address _wbnb) {
@@ -128,6 +137,14 @@ contract SpartanSwapUtils is Multicall {
 
     function getSynthVaultInt() public view returns (iSYNTHVAULT) {
         return iSYNTHVAULT(getSynthVaultAddr()); //
+    }
+
+    function getBondVaultAddr() public view returns (address) {
+        return getDaoInt().BONDVAULT(); //
+    }
+
+    function getBondVaultInt() public view returns (iBONDVAULT) {
+        return iBONDVAULT(getBondVaultAddr()); //
     }
 
     /** PoolFactory Getters */
@@ -221,7 +238,28 @@ contract SpartanSwapUtils is Multicall {
         }
     }
 
-        function getSynthDetails(address userAddr, address[] calldata tokens)
+    function getReserveHoldings() public view returns (ReserveDetails[] memory returnData) {
+        address[] memory reservePools = reserveHeldPools;
+        uint256 length = reservePools.length;
+        returnData = new ReserveDetails[](length);
+        for (uint256 i = 0; i < length; ) {
+            ReserveDetails memory resPool = returnData[i];
+            resPool.poolAddress = reservePools[i];
+            uint resBalance = iPOOL(reservePools[i]).balanceOf(getReserveAddr());
+            uint poolTotalSupply = iPOOL(reservePools[i]).totalSupply();
+            uint poolBaseAmount = iPOOL(reservePools[i]).baseAmount();
+            uint poolTokenAmount = iPOOL(reservePools[i]).tokenAmount();
+            resPool.poolTotalSupply = poolTotalSupply;
+            resPool.poolBaseAmount = poolBaseAmount;
+            resPool.poolTokenAmount = poolTokenAmount;
+            resPool.resBalance = resBalance;
+            resPool.resSparta = (poolBaseAmount * resBalance) / poolTotalSupply;
+            resPool.resTokens = (poolTokenAmount * resBalance) / poolTotalSupply;
+            unchecked {++i;}
+        }
+    }
+
+    function getSynthDetails(address userAddr, address[] calldata tokens)
         external
         view
         returns (SynthDetails[] memory returnData)
@@ -242,23 +280,25 @@ contract SpartanSwapUtils is Multicall {
         }
     }
 
-    function getReserveHoldings() public view returns (ReserveDetails[] memory returnData) {
-        address[] memory reservePools = reserveHeldPools;
-        uint256 length = reservePools.length;
-        returnData = new ReserveDetails[](length);
+    function getBondDetails(address userAddr)
+        external
+        view
+        returns (BondDetails[] memory returnData)
+    {
+        address[] memory _bondedPools = bondedPools;
+        uint256 length = _bondedPools.length;
+        returnData = new BondDetails[](length);
         for (uint256 i = 0; i < length; ) {
-            ReserveDetails memory resPool = returnData[i];
-            resPool.poolAddress = reservePools[i];
-            uint resBalance = iPOOL(reservePools[i]).balanceOf(getReserveAddr());
-            uint poolTotalSupply = iPOOL(reservePools[i]).totalSupply();
-            uint poolBaseAmount = iPOOL(reservePools[i]).baseAmount();
-            uint poolTokenAmount = iPOOL(reservePools[i]).tokenAmount();
-            resPool.poolTotalSupply = poolTotalSupply;
-            resPool.poolBaseAmount = poolBaseAmount;
-            resPool.poolTokenAmount = poolTokenAmount;
-            resPool.resBalance = resBalance;
-            resPool.resSparta = (poolBaseAmount * resBalance) / poolTotalSupply;
-            resPool.resTokens = (poolTokenAmount * resBalance) / poolTotalSupply;
+            BondDetails memory bond = returnData[i];
+            bond.poolAddress = _bondedPools[i];
+            bond.bondedTotal = getBondVaultInt().mapTotalPool_balance(_bondedPools[i]);
+            if (userAddr != address(0)) {
+                (bool isMember, uint256 bondedMember, uint256 claimRate, uint256 lastBlockTime) = getBondVaultInt().getMemberDetails(userAddr, _bondedPools[i]);
+                bond.isMember = isMember;
+                bond.bondedMember = bondedMember;
+                bond.claimRate = claimRate;
+                bond.lastBlockTime = lastBlockTime;
+            }
             unchecked {++i;}
         }
     }
@@ -314,6 +354,11 @@ contract SpartanSwapUtils is Multicall {
     function setReservePoolArray(address[] calldata reservePoolArray) external {
         // Loop and require(isPool)
         reserveHeldPools = reservePoolArray;
+    }
+
+    function setBondPoolArray(address[] calldata bondPoolArray) external {
+        // Loop and require(isPool)
+        bondedPools = bondPoolArray;
     }
 
 }

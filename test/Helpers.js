@@ -1,5 +1,11 @@
 const address0 = "0x0000000000000000000000000000000000000000";
 const one = "1000000000000000000";
+const ten = "10000000000000000000";
+const oneHundred = "100000000000000000000";
+const oneThousand = "1000000000000000000000";
+const tenThousand = "10000000000000000000000";
+const oneHundredThousand = "100000000000000000000000";
+const oneMillion = "1000000000000000000000000";
 const minAmount = "1000000000000000000000";
 const allowAmnt = "100000000000000000000000000000000000000000000";
 
@@ -10,6 +16,17 @@ const getBalances = async (tokenContract, userAddrArray) => {
     results.push(result.toString());
   }
   return results;
+};
+
+const getBNBBalance = async (UserObj) => {
+  const bnbBal = await UserObj.getBalance();
+  return bnbBal;
+};
+
+const approve = async (tokenObject, apprvContr, spenderAddr) => {
+  await tokenObject.approve(apprvContr, allowAmnt, {
+    from: spenderAddr,
+  });
 };
 
 const deployPool = async (addLiqAmount, PoolFact, tokenAddr) => {
@@ -30,6 +47,15 @@ const deploySynth = async (SynthFact, tokenAddr) => {
   await SynthFact.createSynth(tokenAddr);
 };
 
+const listBond = async (BondVault, Token, daoAddress, spenderAddr) => {
+  await BondVault.listBondAsset(Token.address);
+  await approve(Token, daoAddress, spenderAddr);
+};
+
+const mintSpartaForBond = async (Sparta, daoAddress) => {
+  await Sparta.mintFromDAO(oneMillion, daoAddress);
+};
+
 const deployBatchTokens = async (
   tokenCount,
   namingString,
@@ -48,9 +74,7 @@ const deployBatchTokens = async (
   // Do approvals
   for (let i = 0; i < tokenObjects.length; i++) {
     for (let ii = 0; ii < apprvContrArray.length; ii++) {
-      await tokenObjects[i].approve(apprvContrArray[ii], allowAmnt, {
-        from: spenderAddr,
-      });
+      await approve(tokenObjects[i], apprvContrArray[ii], spenderAddr);
     }
   }
   return { tokenObjects, tokenArray };
@@ -67,11 +91,20 @@ module.exports = {
   minAmount,
   allowAmnt,
   one,
+  ten,
+  oneHundred,
+  oneThousand,
+  oneHundredThousand,
+  oneMillion,
   getBalances,
+  getBNBBalance,
   deployPool,
   curatePool,
   unCuratePool,
   deploySynth,
+  listBond,
+  mintSpartaForBond,
+  approve,
   deployBatchTokens,
   connectToContract,
 };
