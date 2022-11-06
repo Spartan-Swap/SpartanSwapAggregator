@@ -1,11 +1,5 @@
 // SPDX-License-Identifier: MIT
 
-/**
- * Included Multicall utility for broad/non-specific or dynamic/non-ABI multicall needs
- * To use, see: https://docs.openzeppelin.com/contracts/4.x/utilities#multicall
- */
-import "@openzeppelin/contracts/utils/Multicall.sol";
-
 /** Interfaces */
 import "./ABI/iERC20.sol";
 import "./ABI/iDAO.sol";
@@ -22,7 +16,7 @@ import "./ABI/iDAOVAULT.sol";
 pragma solidity ^0.8.3;
 
 /** Utilities contract to batch and help reduce external RPC calls for the SpartanSwap DApp */
-contract SpartanSwapUtils is Multicall {
+contract SpartanSwapUtils {
     address public immutable SPARTA; // SPARTAv2 token contract address
     address public immutable WBNB; // WBNB token contract address
     address[] public stableCoinPools; // Array of stablecoin pool addresses WITH SUFFICIENT LIQUIDITY to derive internal pricing. Make sure this array is set in order of smallest to deepest
