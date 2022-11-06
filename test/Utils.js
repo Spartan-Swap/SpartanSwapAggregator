@@ -185,6 +185,7 @@ describe("Deploy and test", function () {
   it("Global details should be set at defaults", async function () {
     const { SSUtils } = await loadFixture(deployTokenFixture);
     let globalDetails = await SSUtils.getGlobalDetails();
+
     globalDetails = globalDetails[0];
     // console.log(globalDetails);
     expect(globalDetails.emitting).to.equal(false);
@@ -326,7 +327,7 @@ describe("Deploy and test", function () {
   it("Should list pools and get SPARTA TVL using a bounded array", async function () {
     const { PoolFact, owner, SSUtils } = await loadFixture(deployTokenFixture);
     const { tokenObjects, tokenArray } = await deployBatchTokens(
-      3,
+      20,
       "Token",
       owner.address,
       [PoolFact.address]
@@ -411,7 +412,7 @@ describe("Deploy and test", function () {
     const { Sparta, Dao, Router, PoolFact, BondVault, SSUtils, owner } =
       await loadFixture(deployTokenFixture);
     const { tokenObjects, tokenArray } = await deployBatchTokens(
-      5,
+      3,
       "Token",
       owner.address,
       [PoolFact.address, Dao.address]
