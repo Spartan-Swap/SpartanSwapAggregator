@@ -322,6 +322,7 @@ describe("Deploy and test", function () {
     }
     const tvlSPARTA = await SSUtils.getTVLUnbounded();
     // console.log(tvlSPARTA);
+    expect(tvlSPARTA).to.be.gt(0);
   });
 
   it("Should list pools and get SPARTA TVL using a bounded array", async function () {
@@ -352,6 +353,8 @@ describe("Deploy and test", function () {
       await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pools
     }
     const tvlSPARTA = await SSUtils.getTVLUnbounded();
+    // console.log(tvlSPARTA);
+    expect(tvlSPARTA).to.be.gt(0);
 
     const poolDetails = await SSUtils.getPoolDetails(owner.address, tokenArray);
     const poolArray = [];
@@ -368,7 +371,7 @@ describe("Deploy and test", function () {
   });
 
   it("Should get reserve holdings", async function () {
-    const { PoolFact, owner, SSUtils } = await loadFixture(deployTokenFixture);
+    const { PoolFact, owner, SSUtils, Reserve } = await loadFixture(deployTokenFixture);
     const { tokenObjects, tokenArray } = await deployBatchTokens(
       5,
       "Token",
@@ -379,9 +382,16 @@ describe("Deploy and test", function () {
       await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pools
     }
     const poolAddrs = await SSUtils.getListedPools();
-    const resPoolAddrs = await SSUtils.setReservePoolArray(poolAddrs);
+    for (let i = 0; i < poolAddrs.length; i++) {
+      const PoolObj = await connectToContract("Pool", poolAddrs[0]); // Get pool object
+      await PoolObj.transfer(Reserve.address, 50);
+    }
+    await SSUtils.setReservePoolArray(poolAddrs);
     const resHoldings = await SSUtils.getReserveHoldings();
     // console.log(resHoldings);
+    expect(resHoldings[0].resBalance).to.be.gt(0);
+    expect(resHoldings[0].resSparta).to.be.gt(0);
+    expect(resHoldings[0].resTokens).to.be.gt(0);
   });
 
   it("Should list pools->curate->synths & return their synth details", async function () {

@@ -19,6 +19,7 @@ pragma solidity 0.8.16;
 contract SpartanSwapUtils {
     address public immutable sparta; // SPARTAv2 token contract address
     address public immutable wbnb; // WBNB token contract address
+    address private immutable deployer; // Deployer address, can be immutable because its easy to redeploy contract (no important state held)
     address[] public stableCoinPools; // Array of stablecoin pool addresses WITH SUFFICIENT LIQUIDITY to derive internal pricing. Make sure this array is set in order of smallest to deepest
     address[] public reserveHeldPools; // Array of pool addresses that the reserve holds LPs of
     address[] public bondedPools; // Array of pool addresses that were enabled for BondV2
@@ -97,6 +98,7 @@ contract SpartanSwapUtils {
     constructor(address _spartaAddr, address _wbnb) {
         sparta = _spartaAddr;
         wbnb = _wbnb;
+        deployer = msg.sender;
     }
 
     /** Contract Getters */
@@ -356,7 +358,7 @@ contract SpartanSwapUtils {
     }
 
     function getTVLUnbounded() external view returns (uint256 tvlSPARTA) {
-        address[] memory _poolAddresses = iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getTokenAssets(); // Cache pool array
+        address[] memory _poolAddresses = iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getPoolAssets(); // Cache pool array
         for (uint256 i = 0; i < _poolAddresses.length; ) {
             tvlSPARTA = tvlSPARTA + iSPARTA(sparta).balanceOf(_poolAddresses[i]);
             unchecked {++i;}
@@ -375,18 +377,18 @@ contract SpartanSwapUtils {
     // Setters
 
     function setStablePoolArray(address[] calldata stablePoolArray) external {
-        // TODO: Loop and require(isPool) - Sanity
-        stableCoinPools = stablePoolArray;
+        require(msg.sender == deployer, '!AUTH');
+        stableCoinPools = stablePoolArray; // Optional addition: Loop and require(isPool) - Sanity
     }
 
     function setReservePoolArray(address[] calldata reservePoolArray) external {
-        // TODO: Loop and require(isPool) - Sanity
-        reserveHeldPools = reservePoolArray;
+        require(msg.sender == deployer, '!AUTH');
+        reserveHeldPools = reservePoolArray; // Optional addition: Loop and require(isPool) - Sanity
     }
 
     function setBondPoolArray(address[] calldata bondPoolArray) external {
-        // TODO: Loop and require(isPool) - Sanity
-        bondedPools = bondPoolArray;
+        require(msg.sender == deployer, '!AUTH');
+        bondedPools = bondPoolArray; // Optional addition: Loop and require(isPool) - Sanity
     }
 
 }
