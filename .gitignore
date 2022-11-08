@@ -106,3 +106,5 @@ dist
 # HardHat
 cache/
 artifacts/
+
+.vscode

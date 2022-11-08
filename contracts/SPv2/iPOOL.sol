@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.3;
+pragma solidity 0.8.16;
 interface iPOOL {
     function TOKEN() external view returns(address);
     function genesis() external view returns(uint);

@@ -13,12 +13,12 @@ import "./ABI/iSYNTHVAULT.sol";
 import "./ABI/iBONDVAULT.sol";
 import "./ABI/iDAOVAULT.sol";
 
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 /** Utilities contract to batch and help reduce external RPC calls for the SpartanSwap DApp */
 contract SpartanSwapUtils {
-    address public immutable SPARTA; // SPARTAv2 token contract address
-    address public immutable WBNB; // WBNB token contract address
+    address public immutable sparta; // SPARTAv2 token contract address
+    address public immutable wbnb; // WBNB token contract address
     address[] public stableCoinPools; // Array of stablecoin pool addresses WITH SUFFICIENT LIQUIDITY to derive internal pricing. Make sure this array is set in order of smallest to deepest
     address[] public reserveHeldPools; // Array of pool addresses that the reserve holds LPs of
     address[] public bondedPools; // Array of pool addresses that were enabled for BondV2
@@ -95,38 +95,38 @@ contract SpartanSwapUtils {
     }
 
     constructor(address _spartaAddr, address _wbnb) {
-        SPARTA = _spartaAddr;
-        WBNB = _wbnb;
+        sparta = _spartaAddr;
+        wbnb = _wbnb;
     }
 
     /** Contract Getters */
 
     function getDaoAddr() external view returns (address) {
-        return iSPARTA(SPARTA).DAO(); // Call SPARTAv2 token contract for SPv2 DAO address
+        return iSPARTA(sparta).DAO(); // Call SPARTAv2 token contract for SPv2 DAO address
     }
 
     function getPoolFactoryAddr() external view returns (address) {
-        return iDAO(iSPARTA(SPARTA).DAO()).POOLFACTORY(); // Call SPv2 DAO contract for SPv2 PoolFactory address
+        return iDAO(iSPARTA(sparta).DAO()).POOLFACTORY(); // Call SPv2 DAO contract for SPv2 PoolFactory address
     }
 
     function getReserveAddr() external view returns (address) {
-        return iDAO(iSPARTA(SPARTA).DAO()).RESERVE(); //
+        return iDAO(iSPARTA(sparta).DAO()).RESERVE(); //
     }
 
     function getSynthFactoryAddr() external view returns (address) {
-        return iDAO(iSPARTA(SPARTA).DAO()).SYNTHFACTORY(); //
+        return iDAO(iSPARTA(sparta).DAO()).SYNTHFACTORY(); //
     }
 
     function getSynthVaultAddr() external view returns (address) {
-        return iDAO(iSPARTA(SPARTA).DAO()).SYNTHVAULT(); //
+        return iDAO(iSPARTA(sparta).DAO()).SYNTHVAULT(); //
     }
 
     function getBondVaultAddr() external view returns (address) {
-        return iDAO(iSPARTA(SPARTA).DAO()).BONDVAULT(); //
+        return iDAO(iSPARTA(sparta).DAO()).BONDVAULT(); //
     }
 
     function getDaoVaultAddr() external view returns (address) {
-        return iDAO(iSPARTA(SPARTA).DAO()).DAOVAULT(); //
+        return iDAO(iSPARTA(sparta).DAO()).DAOVAULT(); //
     }
 
     /** PoolFactory Getters */
@@ -134,17 +134,17 @@ contract SpartanSwapUtils {
     function getListedTokens() external view returns (address[] memory) {
         // Returning the `address[] memory` is fine for current AMM design as the gas limit wont be reached
         // However V3 should utilize a `.length` and loop mappings to ensure scalability
-        return iPOOLFACTORY(iDAO(iSPARTA(SPARTA).DAO()).POOLFACTORY()).getTokenAssets();
+        return iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getTokenAssets();
     }
 
     function getListedPools() external view returns (address[] memory) {
         // Returning the `address[] memory` is fine for current AMM design as the gas limit wont be reached
         // However V3 should utilize a `.length` and loop mappings to ensure scalability
-        return iPOOLFACTORY(iDAO(iSPARTA(SPARTA).DAO()).POOLFACTORY()).getPoolAssets();
+        return iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getPoolAssets();
     }
 
     function getCuratedPools() external view returns (address[] memory) {
-        return iPOOLFACTORY(iDAO(iSPARTA(SPARTA).DAO()).POOLFACTORY()).getVaultAssets();
+        return iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getVaultAssets();
     }
 
 
@@ -154,22 +154,22 @@ contract SpartanSwapUtils {
         returns (GlobalDetails[] memory returnData)
     {
         // Dont cache Sparta address because its immutable (cheap gas)
-        address _reserve = iDAO(iSPARTA(SPARTA).DAO()).RESERVE(); // Cache Reserve Address
+        address _reserve = iDAO(iSPARTA(sparta).DAO()).RESERVE(); // Cache Reserve Address
         returnData = new GlobalDetails[](1);
         GlobalDetails memory global = returnData[0];
-        global.emitting = iSPARTA(SPARTA).emitting();
-        global.totalSupply = iSPARTA(SPARTA).totalSupply();
-        global.secondsPerEra = iSPARTA(SPARTA).secondsPerEra();
-        global.deadSupply = iSPARTA(SPARTA).balanceOf(
+        global.emitting = iSPARTA(sparta).emitting();
+        global.totalSupply = iSPARTA(sparta).totalSupply();
+        global.secondsPerEra = iSPARTA(sparta).secondsPerEra();
+        global.deadSupply = iSPARTA(sparta).balanceOf(
             0x000000000000000000000000000000000000dEaD
         );
         global.emissions = iRESERVE(_reserve).emissions();
-        global.spartaBalance = iSPARTA(SPARTA).balanceOf(iDAO(iSPARTA(SPARTA).DAO()).RESERVE());
+        global.spartaBalance = iSPARTA(sparta).balanceOf(iDAO(iSPARTA(sparta).DAO()).RESERVE());
         global.globalFreeze = iRESERVE(_reserve).globalFreeze();
     }
     
     function getDaoGlobalDetails() external view returns (DaoGlobalDetails[] memory returnData) {
-        address _dao = iSPARTA(SPARTA).DAO(); // Cache dao address
+        address _dao = iSPARTA(sparta).DAO(); // Cache dao address
         returnData = new DaoGlobalDetails[](1);
         DaoGlobalDetails memory daoGlobal = returnData[0];
         daoGlobal.running = iDAO(_dao).running();
@@ -191,7 +191,7 @@ contract SpartanSwapUtils {
         for (uint256 i = 0; i < _length; ) {
             address _token = tokens[i]; // Cache token address
             TokenDetails memory token = returnData[i];
-            if (_token == WBNB || _token == address(0)) {
+            if (_token == wbnb || _token == address(0)) {
                 token.decimals = 18;
                 token.symbol = 'WBNB';
             } else {
@@ -199,7 +199,7 @@ contract SpartanSwapUtils {
                 token.symbol = iERC20(_token).symbol();
             }
             if (userAddr != address(0)) {
-                if (_token == WBNB || _token == address(0)) {
+                if (_token == wbnb || _token == address(0)) {
                     token.balance = address(userAddr).balance;
                 } else {
                     token.balance = iERC20(_token).balanceOf(userAddr);
@@ -217,7 +217,7 @@ contract SpartanSwapUtils {
         uint256 _length = tokens.length; // Cache array length
         returnData = new PoolDetails[](_length);
         for (uint256 i = 0; i < _length; ) {
-            address _poolAddr = iPOOLFACTORY(iDAO(iSPARTA(SPARTA).DAO()).POOLFACTORY()).getPool(tokens[i]); // Cache pool address
+            address _poolAddr = iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getPool(tokens[i]); // Cache pool address
             PoolDetails memory pool = returnData[i];
             pool.poolAddress = _poolAddr;
             pool.frozen = iPOOL(_poolAddr).freeze();
@@ -242,7 +242,7 @@ contract SpartanSwapUtils {
             address _pool = _reservePools[i]; // Cache pool address
             ReserveDetails memory resPool = returnData[i];
             resPool.poolAddress = _pool;
-            uint256 _resBalance = iPOOL(_pool).balanceOf(iDAO(iSPARTA(SPARTA).DAO()).RESERVE());
+            uint256 _resBalance = iPOOL(_pool).balanceOf(iDAO(iSPARTA(sparta).DAO()).RESERVE());
             uint256 _poolTotalSupply = iPOOL(_pool).totalSupply();
             uint256 _poolBaseAmount = iPOOL(_pool).baseAmount();
             uint256 _poolTokenAmount = iPOOL(_pool).tokenAmount();
@@ -262,8 +262,8 @@ contract SpartanSwapUtils {
         returns (SynthDetails[] memory returnData)
     {
         uint256 _length = tokens.length; // Cache array length
-        address _synthFactory = iDAO(iSPARTA(SPARTA).DAO()).SYNTHFACTORY(); // Cache synth factory address
-        address _synthVault = iDAO(iSPARTA(SPARTA).DAO()).SYNTHVAULT(); // Cache synth vault address
+        address _synthFactory = iDAO(iSPARTA(sparta).DAO()).SYNTHFACTORY(); // Cache synth factory address
+        address _synthVault = iDAO(iSPARTA(sparta).DAO()).SYNTHVAULT(); // Cache synth vault address
         returnData = new SynthDetails[](_length);
         for (uint256 i = 0; i < _length; ) {
             address _synthAddr = iSYNTHFACTORY(_synthFactory).getSynth(tokens[i]);
@@ -286,7 +286,7 @@ contract SpartanSwapUtils {
     {
         address[] memory _bondedPools = bondedPools; // Cache pool array
         uint256 _length = _bondedPools.length; // Cache array length
-        address _bondVault = iDAO(iSPARTA(SPARTA).DAO()).BONDVAULT();
+        address _bondVault = iDAO(iSPARTA(sparta).DAO()).BONDVAULT();
         returnData = new BondDetails[](_length);
         for (uint256 i = 0; i < _length; ) {
             address _poolAddr = _bondedPools[i]; // Cache pool address
@@ -310,7 +310,7 @@ contract SpartanSwapUtils {
         view
         returns (DaoDetails[] memory returnData)
     {
-        address _daoVault = iDAO(iSPARTA(SPARTA).DAO()).DAOVAULT(); // Cache dao vault address
+        address _daoVault = iDAO(iSPARTA(sparta).DAO()).DAOVAULT(); // Cache dao vault address
         uint256 _length = pools.length; // Cache array length
         returnData = new DaoDetails[](_length);
         for (uint256 i = 0; i < _length; ) {
@@ -327,15 +327,15 @@ contract SpartanSwapUtils {
 
     function getTotalSupply() external view returns (uint256 totalSupply) {
         totalSupply =
-            iSPARTA(SPARTA).totalSupply() - // RawTotalSupply
-            iSPARTA(SPARTA).balanceOf(0x000000000000000000000000000000000000dEaD); // BurnedSupply
+            iSPARTA(sparta).totalSupply() - // RawTotalSupply
+            iSPARTA(sparta).balanceOf(0x000000000000000000000000000000000000dEaD); // BurnedSupply
     }
 
     function getCircSupply() external view returns (uint256 circSupply) {
         circSupply = 
-            iSPARTA(SPARTA).totalSupply() -
-            iSPARTA(SPARTA).balanceOf(0x000000000000000000000000000000000000dEaD) -
-            iSPARTA(SPARTA).balanceOf(iDAO(iSPARTA(SPARTA).DAO()).RESERVE());
+            iSPARTA(sparta).totalSupply() -
+            iSPARTA(sparta).balanceOf(0x000000000000000000000000000000000000dEaD) -
+            iSPARTA(sparta).balanceOf(iDAO(iSPARTA(sparta).DAO()).RESERVE());
         ReserveDetails[] memory resHoldings = getReserveHoldings();
         for (uint256 i = 0; i < resHoldings.length; ) {
             circSupply = circSupply - resHoldings[i].resSparta;
@@ -356,9 +356,9 @@ contract SpartanSwapUtils {
     }
 
     function getTVLUnbounded() external view returns (uint256 tvlSPARTA) {
-        address[] memory _poolAddresses = iPOOLFACTORY(iDAO(iSPARTA(SPARTA).DAO()).POOLFACTORY()).getTokenAssets(); // Cache pool array
+        address[] memory _poolAddresses = iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()).getTokenAssets(); // Cache pool array
         for (uint256 i = 0; i < _poolAddresses.length; ) {
-            tvlSPARTA = tvlSPARTA + iSPARTA(SPARTA).balanceOf(_poolAddresses[i]);
+            tvlSPARTA = tvlSPARTA + iSPARTA(sparta).balanceOf(_poolAddresses[i]);
             unchecked {++i;}
         }
         tvlSPARTA = tvlSPARTA * 2;
@@ -366,7 +366,7 @@ contract SpartanSwapUtils {
 
     function getTVL(address[] calldata poolAddresses) external view returns (uint256 tvlSPARTA) {
         for (uint256 i = 0; i < poolAddresses.length; ) {
-            tvlSPARTA = tvlSPARTA + iSPARTA(SPARTA).balanceOf(poolAddresses[i]);
+            tvlSPARTA = tvlSPARTA + iSPARTA(sparta).balanceOf(poolAddresses[i]);
             unchecked {++i;}
         }
         tvlSPARTA = tvlSPARTA * 2;

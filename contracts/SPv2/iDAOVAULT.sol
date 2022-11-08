@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.3;
+pragma solidity 0.8.16;
 interface iDAOVAULT{
   function getMemberWeight(address) external view returns (uint256);
   function getMemberPoolBalance(address, address) external view returns(uint);

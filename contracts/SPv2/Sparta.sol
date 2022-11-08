@@ -1,6 +1,6 @@
 
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.3;
+pragma solidity 0.8.16;
 import "./iBEP20.sol";
 import "./iDAO.sol";
 import "./iBASEv1.sol"; 

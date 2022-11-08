@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.3;
+pragma solidity 0.8.16;
 interface iROUTER {
     function addLiquidityForMember(uint, uint, address, address) external payable returns (uint);
     function synthMinting() external view returns (bool);
