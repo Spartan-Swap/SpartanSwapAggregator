@@ -371,7 +371,9 @@ describe("Deploy and test", function () {
   });
 
   it("Should get reserve holdings", async function () {
-    const { PoolFact, owner, SSUtils, Reserve } = await loadFixture(deployTokenFixture);
+    const { PoolFact, owner, SSUtils, Reserve } = await loadFixture(
+      deployTokenFixture
+    );
     const { tokenObjects, tokenArray } = await deployBatchTokens(
       5,
       "Token",
@@ -549,5 +551,67 @@ describe("Deploy and test", function () {
       }
       expect(daoDetails[i].staked).to.equal(daoDetails[i].globalStaked); // Total staked in DaoVault === user's stake
     }
+  });
+
+  it("Should deploy pools, confirm the quote is == output of the swap for a single & double swap", async function () {
+    const { PoolFact, owner, SSUtils, Router, Sparta } = await loadFixture(
+      deployTokenFixture
+    );
+    const { tokenObjects, tokenArray } = await deployBatchTokens(
+      2,
+      "Some Pewwwls",
+      owner.address,
+      [PoolFact.address, Router.address]
+    );
+
+    for (let i = 0; i < tokenArray.length; i++) {
+      await deployPool(minAmount, PoolFact, tokenArray[i]); // Deploy pool
+    }
+
+    // Get singleswap quote
+    const singleSwapQuote = await SSUtils.getSwapOutput(
+      tokenArray[0],
+      Sparta.address,
+      "1000000000000000000000"
+    );
+    // Do singleswap
+    let singleTxn = await Router.swap(
+      "1000000000000000000000",
+      tokenArray[0],
+      Sparta.address,
+      "0"
+    );
+    singleTxn = await singleTxn.wait();
+    const singleOutput = BigNumber(singleTxn.logs[3].data).toFixed();
+    // console.log(singleSwapQuote);
+    // console.log(singleOutput);
+    expect(singleSwapQuote).to.equal(singleOutput); // Make sure the output is == quote
+
+    // Get doubleswap quote
+    const doubleSwapQuote = await SSUtils.getSwapOutput(
+      tokenArray[0],
+      tokenArray[1],
+      "1000000000000000000000"
+    );
+    // Do doubleswap
+    let doubleTxn = await Router.swap(
+      "1000000000000000000000",
+      tokenArray[0],
+      tokenArray[1],
+      "0"
+    );
+    doubleTxn = await doubleTxn.wait();
+    const doubleOutput = BigNumber(doubleTxn.logs[6].data).toFixed();
+    // console.log(doubleSwapQuote);
+    // console.log(doubleOutput);
+    expect(doubleSwapQuote).to.equal(doubleOutput); // Make sure the output is == quote
+
+    const badSwapQuote = await SSUtils.getSwapOutput(
+      "0xFC7eAd29ee55EabEC54dBc38bd03852e1fF46D50", // random address -> isPool === false
+      "0xa6C3288C18505D134445cB4Fe8499da22002F1E0", // random address -> isPool === false
+      "1000000000000000000000"
+    );
+    // console.log(badSwapQuote);
+    expect(badSwapQuote).to.equal(0); // Make sure the bad swaps dont revert and instead return 0
   });
 });

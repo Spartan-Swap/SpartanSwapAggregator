@@ -374,6 +374,43 @@ contract SpartanSwapUtils {
         tvlSPARTA = tvlSPARTA * 2;
     }
 
+    function _calcSwap(uint256 inputAmount, uint256 inputDepth, uint256 outputDepth) internal pure returns (uint256 outputAmount){
+        uint numerator = inputAmount * inputDepth * outputDepth;
+        uint denominator = (inputAmount + inputDepth) * (inputAmount + inputDepth);
+        if (denominator <= 0) {
+            return 0;
+        }
+        return numerator / denominator;
+    }
+
+    function getSwapOutput(address inputToken, address outputToken, uint256 inputAmount) external view returns (uint256 outputAmount) {
+        iPOOLFACTORY _poolFactory = iPOOLFACTORY(iDAO(iSPARTA(sparta).DAO()).POOLFACTORY()); // Interface the PoolFactory
+        if(inputToken == sparta){
+            address _pool = _poolFactory.getPool(outputToken); // Get the pool address
+            if (!_poolFactory.isPool(_pool)) return 0;
+            uint256 baseDepth = iPOOL(_pool).baseAmount(); // Get _pool.baseDepth
+            uint256 tokenDepth = iPOOL(_pool).tokenAmount(); // Get _pool.tokenDepth
+            return _calcSwap(inputAmount, baseDepth, tokenDepth);
+        } else if(outputToken == sparta) {
+            address _pool = _poolFactory.getPool(inputToken); // Get pool address
+            if (!_poolFactory.isPool(_pool)) return 0;
+            uint256 baseDepth = iPOOL(_pool).baseAmount(); // Get _pool.baseDepth
+            uint256 tokenDepth = iPOOL(_pool).tokenAmount(); // Get _pool.tokenDepth
+            return _calcSwap(inputAmount, tokenDepth, baseDepth);
+        } else {
+            address _pool = _poolFactory.getPool(inputToken); // Get pool address
+            if (!_poolFactory.isPool(_pool)) return 0;
+            address _poolTo = _poolFactory.getPool(outputToken); // Get pool address
+            if (!_poolFactory.isPool(_poolTo)) return 0;
+            uint256 baseDepth = iPOOL(_pool).baseAmount(); // Get _pool.baseDepth
+            uint256 tokenDepth = iPOOL(_pool).tokenAmount(); // Get _pool.tokenDepth
+            uint256 _firstOutput = _calcSwap(inputAmount, tokenDepth, baseDepth);
+            baseDepth = iPOOL(_poolTo).baseAmount(); // Get _pool.baseDepth
+            tokenDepth = iPOOL(_poolTo).tokenAmount(); // Get _pool.tokenDepth
+            return _calcSwap(_firstOutput, baseDepth, tokenDepth);
+        }
+    }
+
     // Setters
 
     function setStablePoolArray(address[] calldata stablePoolArray) external {
